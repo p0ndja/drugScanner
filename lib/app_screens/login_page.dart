@@ -33,6 +33,9 @@ class _LoginPageState extends State<LoginPage> {
                 Icons.login,
               ),
               const Text('หรือสมัครสมาชิก'),
+              const SizedBox(
+                height: 5,
+              ),
               _button(
                 'สมัครสมาชิก',
                 Icons.app_registration,
@@ -63,12 +66,9 @@ Widget iconApp = Container(
   ),
 );
 
-Widget blackground = Container(
-  color: Colors.green,
-);
-
 Widget _inputBox(String name) {
-  return SizedBox(
+  return Container(
+    margin: const EdgeInsets.only(bottom: 5.0),
     width: 250,
     child: Column(
       children: [
@@ -79,12 +79,21 @@ Widget _inputBox(String name) {
             textAlign: TextAlign.start,
           ),
         ),
-        TextField(
-          decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.grey[300],
-              border: const OutlineInputBorder(),
-              contentPadding: const EdgeInsets.all(8)),
+        const SizedBox(
+          height: 5.0,
+        ),
+        SizedBox(
+          height: 35,
+          child: TextField(
+            decoration: InputDecoration(
+                enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey, width: 0.0)),
+                filled: true,
+                fillColor: Colors.grey[300],
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8)),
+          ),
         )
       ],
     ),
@@ -92,7 +101,8 @@ Widget _inputBox(String name) {
 }
 
 Widget _button(String label, IconData icon) {
-  return SizedBox(
+  return Container(
+    margin: const EdgeInsets.only(bottom: 5.0),
     width: 250,
     child: ElevatedButton.icon(
         style:
