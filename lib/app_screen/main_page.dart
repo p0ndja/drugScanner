@@ -1,3 +1,4 @@
+import 'package:drug_scanner/app_screen/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:drug_scanner/app_screen/account.dart';
 import 'package:drug_scanner/app_screen/search.dart';

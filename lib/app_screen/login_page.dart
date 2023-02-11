@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main_page.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,34 +13,37 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(
-      children: [
-        FractionallySizedBox(
-          widthFactor: 1, // between 0 and 1
-          heightFactor: 0.3,
-          child: Container(
-            color: const Color(0xff008080),
-          ),
-        ),
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              iconApp,
-              _inputBox('อีเมล'),
-              _inputBox('รหัสผ่าน'),
-              _forgetPasswordButton(),
-              _button('เข้าสู่ระบบ', Icons.login, context),
-              const Text('หรือสมัครสมาชิก'),
-              const SizedBox(
-                height: 5,
+          children: [
+            FractionallySizedBox(
+              widthFactor: 1, // between 0 and 1
+              heightFactor: 0.3,
+              child: Container(
+                color: const Color(0xff008080),
               ),
-              _button('สมัครสมาชิก', Icons.app_registration, context)
-            ],
-          ),
-        )
-      ],
-    ));
+            ),
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    iconApp,
+                    inputBox('อีเมล', 250),
+                    inputBox('รหัสผ่าน', 250),
+                    _forgetPasswordButton(),
+                    _loginButton(context),
+                    const Text('หรือสมัครสมาชิก'),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    _registerPageButton(context)
+                  ],
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }
 
@@ -61,10 +65,10 @@ Widget iconApp = Container(
   ),
 );
 
-Widget _inputBox(String name) {
+Widget inputBox(String name, double width) {
   return Container(
     margin: const EdgeInsets.only(bottom: 5.0),
-    width: 250,
+    width: width,
     child: Column(
       children: [
         Align(
@@ -72,6 +76,7 @@ Widget _inputBox(String name) {
           child: Text(
             name,
             textAlign: TextAlign.start,
+            style: const TextStyle(fontFamily: 'Kanit'),
           ),
         ),
         const SizedBox(
@@ -95,7 +100,25 @@ Widget _inputBox(String name) {
   );
 }
 
-Widget _button(String label, IconData icon, BuildContext context) {
+Widget _registerPageButton(BuildContext context) {
+  return Container(
+    margin: const EdgeInsets.only(bottom: 5.0),
+    width: 250,
+    child: ElevatedButton.icon(
+        style:
+            ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const RegisterPage()),
+          );
+        },
+        icon: const Icon(Icons.app_registration),
+        label: const Text('สมัครสมาชิก')),
+  );
+}
+
+Widget _loginButton(BuildContext context) {
   return Container(
     margin: const EdgeInsets.only(bottom: 5.0),
     width: 250,
@@ -108,8 +131,8 @@ Widget _button(String label, IconData icon, BuildContext context) {
             MaterialPageRoute(builder: (context) => const MyStatefulWidget()),
           );
         },
-        icon: Icon(icon),
-        label: Text(label)),
+        icon: const Icon(Icons.login),
+        label: const Text('เข้าสู่ระบบ')),
   );
 }
 
