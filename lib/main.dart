@@ -15,6 +15,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'Kanit'),
         title: _title,
-        home: const LoginPage());
+        home: const SearchPage());
   }
 }

@@ -14,39 +14,73 @@ class DrugDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(drugDataModel.name),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 7.0),
-              padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Colors.grey[300]),
-              child: Text(
-                drugDataModel.use,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.grey[500]),
-              ),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            color: Colors.black,
+            iconSize: 35,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {},
+          ),
+          actions: [
+            IconButton(
+              color: Colors.black,
+              iconSize: 35,
+              icon: const Icon(Icons.bookmark_add),
+              onPressed: () {},
             ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              drugDataModel.thaiName,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
-            ),
-            Text(drugDataModel.prop)
           ],
+          elevation: 0,
+          backgroundColor: Colors.transparent,
         ),
-      ),
-    );
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: [
+            LayoutBuilder(builder:
+                (BuildContext context, BoxConstraints viewportConstraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: viewportConstraints.maxHeight,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          height: 320,
+                        ),
+                        Container(
+                            margin: const EdgeInsets.all(20),
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: [
+                                Text(drugDataModel.thaiName),
+                                Text(drugDataModel.name)
+                              ],
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
+            Column(
+              children: [
+                Container(
+                  height: 320,
+                  alignment: Alignment.center, // This is needed
+                  child: Image.network(
+                    alignment: Alignment.center,
+                    height: double.infinity,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
+                    'https://picsum.photos/250?image=9',
+                  ),
+                ),
+              ],
+            )
+          ],
+        ));
   }
 }
 
