@@ -1,3 +1,4 @@
+import 'package:drug_scanner/app_screen/search.dart';
 import 'package:flutter/material.dart';
 import 'app_screen/login_page.dart';
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: _title,
-      home: LoginPage(),
+      home: SearchScreen(),
     );
   }
 }
