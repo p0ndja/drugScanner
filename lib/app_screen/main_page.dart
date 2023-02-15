@@ -1,8 +1,11 @@
-import 'package:drug_scanner/app_screen/search_page.dart';
+import 'package:drug_scanner/app_screen/bookmark_page.dart';
+import 'package:drug_scanner/app_screen/search_result_page.dart';
+import 'package:drug_scanner/app_screen/user_page.dart';
 import 'package:flutter/material.dart';
-import 'package:drug_scanner/app_screen/account.dart';
 import 'package:drug_scanner/app_screen/search.dart';
 import 'package:drug_scanner/app_screen/home.dart';
+
+int selectedIndex = 0;
 
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({super.key});
@@ -12,11 +15,10 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     SearchScreen(),
-    UserScreen(),
+    BookmarkPage(),
   ];
 
   @override
@@ -27,7 +29,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           automaticallyImplyLeading: false,
         ),
         body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: _widgetOptions.elementAt(selectedIndex),
         ),
         bottomNavigationBar: bottomNavigator(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -40,7 +42,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
@@ -56,11 +58,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'User',
+          icon: Icon(Icons.bookmark),
+          label: 'Bookmark',
+
         ),
       ],
-      currentIndex: _selectedIndex,
+      currentIndex: selectedIndex,
       selectedItemColor: Colors.teal,
       onTap: _onItemTapped,
     );

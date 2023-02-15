@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'login_page.dart';
+import 'main_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -105,7 +105,7 @@ Widget _registerButton(BuildContext context) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const RegisterPage()),
+            MaterialPageRoute(builder: (context) => const MyStatefulWidget()),
           );
         },
         icon: const Icon(Icons.app_registration),
@@ -121,10 +121,7 @@ Widget _loginPageButton(BuildContext context) {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
+          Navigator.pop(context);
         },
         icon: const Icon(Icons.login),
         label: const Text('เข้าสู่ระบบ')),

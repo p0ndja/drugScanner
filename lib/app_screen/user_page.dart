@@ -17,7 +17,7 @@ class _UserPageState extends State<UserPage> {
           leading: IconButton(
             iconSize: 35,
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {},
+            onPressed: () { Navigator.pop(context);},
           ),
           elevation: 0,
           backgroundColor: const Color(0xff008080),

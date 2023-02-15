@@ -20,7 +20,9 @@ class DrugDetail extends StatelessWidget {
             color: Colors.black,
             iconSize: 35,
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop(context);
+            },
           ),
           actions: [
             IconButton(
@@ -50,14 +52,15 @@ class DrugDetail extends StatelessWidget {
                           height: 320,
                         ),
                         Container(
-                            margin: const EdgeInsets.all(20),
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              children: [
-                                Text(drugDataModel.thaiName),
-                                Text(drugDataModel.name)
-                              ],
-                            )),
+                          margin: const EdgeInsets.all(20),
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            children: [
+                              Text(drugDataModel.thaiName),
+                              Text(drugDataModel.name)
+                            ],
+                          )
+                        ),
                       ],
                     ),
                   ),
@@ -121,7 +124,7 @@ class _SearchPageState extends State<SearchPage> {
     'TYLENOL 500 mg.',
   ];
   static List<String> drugThaiName = [
-    'TYLENOL 500 mg.',
+    'TYLENOL 500 mg.adasdasdsadsaadsa',
     'TYLENOL 500 mg.',
     'TYLENOL 500 mg.',
     'TYLENOL 500 mg.',
@@ -246,43 +249,43 @@ class _SearchPageState extends State<SearchPage> {
           SliverList(
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
-              return Container(
-                decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(5)),
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                height: 130,
-                child: GestureDetector(
+              return GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             DrugDetail(drugDataModel: drugData[index])));
                   },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Image(
-                            image: NetworkImage(drugData[index].image),
-                            alignment: Alignment.center,
-                            height: double.infinity,
-                            width: double.infinity,
-                            fit: BoxFit.fill),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('ชื่อยา: ${drugData[index].name}'),
-                            Text('ชื่อยา: ${drugData[index].name}')
-                          ],
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(5)),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                    height: 130,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Image(
+                              image: NetworkImage(drugData[index].image),
+                              alignment: Alignment.center,
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit: BoxFit.fill),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              );
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('ชื่อยา: ${drugData[index].name}'),
+                              Text('ชื่อยา: ${drugData[index].name}')
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ));
             }, childCount: drugData.length),
           ),
         ],

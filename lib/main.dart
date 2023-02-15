@@ -1,5 +1,5 @@
 import 'package:drug_scanner/app_screen/main_page.dart';
-import 'package:drug_scanner/app_screen/search_page.dart';
+import 'package:drug_scanner/app_screen/search_result_page.dart';
 import 'package:flutter/material.dart';
 import 'app_screen/login_page.dart';
 import 'app_screen/user_page.dart';
