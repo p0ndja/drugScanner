@@ -1,6 +1,7 @@
+import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'login_page.dart';
+import '../auth_screen/login_page.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -28,7 +29,7 @@ class _UserPageState extends State<UserPage> {
           children: [
             FractionallySizedBox(
               widthFactor: 1, // between 0 and 1
-              heightFactor: 0.3,
+              heightFactor: 0.27,
               child: Container(
                 color: const Color(0xff008080),
               ),
@@ -38,7 +39,7 @@ class _UserPageState extends State<UserPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _avatarUpload(),
+                    _avatarUpload(context),
                     inputBox('อีเมล', 250),
                     inputBox('รหัสผ่าน', 250),
                     Row(
@@ -101,12 +102,12 @@ class _UserPageState extends State<UserPage> {
   }
 }
 
-Widget _avatarUpload() {
+Widget _avatarUpload(context) {
   return Container(
       margin: const EdgeInsets.only(bottom: 20.0),
       child: GestureDetector(
         onTap: () {
-          debugPrint('ddd');
+          scafMsg(context, 'อัปโหลดรูปภาพ');
         },
         child: Container(
           decoration: const BoxDecoration(
@@ -115,11 +116,7 @@ Widget _avatarUpload() {
               boxShadow: [
                 BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 1)
               ]),
-          child: const CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://scontent.fkkc4-1.fna.fbcdn.net/v/t1.6435-9/58734128_1581933278607096_4121677932680708096_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=174925&_nc_eui2=AeGSYlXNvmEm9Ko53j0U4fU1B7P1uXcF0h0Hs_W5dwXSHT-HVE_9F7PF8KPugETuU7zQpz-hbD81naMloWMZ8F1l&_nc_ohc=mV-Qvu6FOCYAX_ngIf9&_nc_ht=scontent.fkkc4-1.fna&oh=00_AfAYqvT-oJWI09rpUePQaHkKqI_iRVeeLxFV65XOOowCjQ&oe=640EC60B'),
-            radius: 90,
-          ),
+          child: UserCircleAvatar(imageUrl: URLPath),
         ),
       ));
 }
@@ -131,7 +128,7 @@ Widget _saveButton(BuildContext context) {
     child: ElevatedButton.icon(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
-        onPressed: () {},
+        onPressed: () { scafMsg(context, 'บันทึกข้อมูล'); Navigator.pop(context); },
         icon: const Icon(Icons.save_rounded),
         label: const Text('บันทึก')),
   );
@@ -144,8 +141,16 @@ Widget _logoutButton(BuildContext context) {
     child: ElevatedButton.icon(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xffD70000)),
-        onPressed: () {},
+        onPressed: () { Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false); },
         icon: const Icon(Icons.logout),
         label: const Text('ออกจากระบบ')),
   );
+}
+
+scafMsg(BuildContext context, String msg) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(msg),
+    duration: Duration(seconds: 1),
+  ));
 }

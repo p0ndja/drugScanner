@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main_page.dart';
+import '../app_screen/container.dart';
 import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -126,10 +126,7 @@ Widget _loginButton(BuildContext context) {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MyStatefulWidget()),
-          );
+          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
         },
         icon: const Icon(Icons.login),
         label: const Text('เข้าสู่ระบบ')),

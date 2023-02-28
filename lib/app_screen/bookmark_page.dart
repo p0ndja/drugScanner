@@ -189,12 +189,6 @@ class _BookmarkPageState extends State<BookmarkPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back,color: Colors.black,),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchPage()));
-              },
-            ),
             backgroundColor: const Color(0xffFFC30F),
             foregroundColor: Colors.black,
             floating: true,
@@ -202,8 +196,6 @@ class _BookmarkPageState extends State<BookmarkPage> {
             snap: false,
             centerTitle: true,
             title: const Text('รายการบันทึก'),
-
-
             bottom: AppBar(
               backgroundColor: const Color(0xffFFC30F),
               title: Container(

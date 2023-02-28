@@ -1,4 +1,7 @@
 
+import 'package:drug_scanner/app_screen/search_result_page.dart';
+import 'package:drug_scanner/app_screen/user_page.dart';
+import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:flutter/material.dart';
 
 
@@ -29,7 +32,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _avatarUpload(),
+                    _avatarUpload(context),
                     Text('Fordranger Raptor',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
                     Text('อายุ 25 ปี ส่วนสูง 163 ซม. น้ำหนัก 55 กก.'),
                     Container(
@@ -38,17 +41,16 @@ class _HomePageState extends State<HomePage> {
                       child: Center(
                         child: TextField(
                           decoration: InputDecoration(
+                              prefix: const Padding(padding: EdgeInsets.only(left: 15)),
                               hintText: 'ค้นหาด้วยชื่อยา...',
-                              prefixIcon: const Icon(
-                                Icons.search,
-                                color: Colors.black,
-                              ),
                               suffixIcon: IconButton(
-                                icon: const Icon(Icons.camera_alt),
-                                color:  Colors.black,
-                                onPressed: () {},
+                                icon: const Icon(Icons.search),
+                                color: const Color(0xff008080),
+                                iconSize: 30,
+                                onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (builder) => SearchPage())); },
                               ),
-                              border: InputBorder.none),
+                              border: InputBorder.none
+                          ),
                         ),
                       ),
                     ),
@@ -118,12 +120,16 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget _avatarUpload() {
+Widget _avatarUpload(BuildContext context) {
   return Container(
       margin: const EdgeInsets.only(bottom: 20.0),
       child: GestureDetector(
         onTap: () {
-          debugPrint('ddd');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const UserPage())
+          );
         },
         child: Container(
           decoration: const BoxDecoration(
@@ -132,11 +138,7 @@ Widget _avatarUpload() {
               boxShadow: [
                 BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 1)
               ]),
-          child: const CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://scontent.fkkc4-1.fna.fbcdn.net/v/t1.6435-9/58734128_1581933278607096_4121677932680708096_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=174925&_nc_eui2=AeGSYlXNvmEm9Ko53j0U4fU1B7P1uXcF0h0Hs_W5dwXSHT-HVE_9F7PF8KPugETuU7zQpz-hbD81naMloWMZ8F1l&_nc_ohc=mV-Qvu6FOCYAX_ngIf9&_nc_ht=scontent.fkkc4-1.fna&oh=00_AfAYqvT-oJWI09rpUePQaHkKqI_iRVeeLxFV65XOOowCjQ&oe=640EC60B'),
-            radius: 90,
-          ),
+          child: UserCircleAvatar(imageUrl: URLPath),
         ),
       ));
 }
@@ -195,4 +197,3 @@ class BoxChoice extends StatelessWidget {
     );
   }
 }
-

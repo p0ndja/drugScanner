@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
-import 'main_page.dart';
+import '../app_screen/container.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -105,7 +105,7 @@ Widget _registerButton(BuildContext context) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const MyStatefulWidget()),
+            MaterialPageRoute(builder: (context) => const MainContainerWidget()),
           );
         },
         icon: const Icon(Icons.app_registration),

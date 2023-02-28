@@ -197,7 +197,7 @@ class _SearchPageState extends State<SearchPage> {
           SliverAppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () {},
+              onPressed: () { Navigator.pop(context); }
             ),
             backgroundColor: const Color(0xff008080),
             floating: true,
@@ -212,6 +212,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ],
             bottom: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: const Color(0xff008080),
               title: Container(
                 width: double.infinity,
@@ -220,17 +221,15 @@ class _SearchPageState extends State<SearchPage> {
                 child: Center(
                   child: TextField(
                     decoration: InputDecoration(
+                        prefix: const Padding(padding: EdgeInsets.only(left: 15)),
                         hintText: 'ค้นหาด้วยชื่อยา...',
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Color(0xff008080),
-                        ),
                         suffixIcon: IconButton(
-                          icon: const Icon(Icons.camera_alt),
+                          icon: const Icon(Icons.search),
                           color: const Color(0xff008080),
                           onPressed: () {},
                         ),
-                        border: InputBorder.none),
+                        border: InputBorder.none
+                    ),
                   ),
                 ),
               ),
