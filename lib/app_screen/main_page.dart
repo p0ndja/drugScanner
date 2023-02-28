@@ -1,4 +1,5 @@
 import 'package:drug_scanner/app_screen/bookmark_page.dart';
+import 'package:drug_scanner/app_screen/home_page.dart';
 import 'package:drug_scanner/app_screen/search_result_page.dart';
 import 'package:drug_scanner/app_screen/user_page.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    SearchPage(),
+    HomePage(),
     BookmarkPage(),
   ];
 
