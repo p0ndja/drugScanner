@@ -245,7 +245,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           )),
-          SliverList(
+          SliverList( //เริ่มลิสยา
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               return GestureDetector(
@@ -254,40 +254,74 @@ class _SearchPageState extends State<SearchPage> {
                         builder: (context) =>
                             DrugDetail(drugDataModel: drugData[index])));
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(5)),
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                    height: 130,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Image(
-                              image: NetworkImage(drugData[index].image),
-                              alignment: Alignment.center,
-                              height: double.infinity,
-                              width: double.infinity,
-                              fit: BoxFit.fill),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('ชื่อยา: ${drugData[index].name}'),
-                              Text('ชื่อยา: ${drugData[index].name}')
-                            ],
-                          ),
-                        )
-                      ],
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          BoxOfPill(drugData[index].image, 'ชื่อยา: ${drugData[index].name}', 'ชื่อยา: ${drugData[index].name}')
+                        ],
+                      ),
                     ),
-                  ));
+                  ),
+              );
             }, childCount: drugData.length),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BoxOfPill extends StatelessWidget {
+  final image,name1,name2;
+  const BoxOfPill(this.image, this.name1, this.name2);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8), //ระยะกล่อง
+      child: Material(
+        color: Colors.transparent,
+        elevation: 2, //เงา
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), //ขอบโค้ง
+        ),
+        child: Container(
+          width: 350,
+          height: 125,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row( // ของในกล่อง
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Image(
+                    image: NetworkImage(image),
+                    alignment: Alignment.center,
+                    height: double.infinity,
+                    width: double.infinity,
+                    fit: BoxFit.fill),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(name1),
+                    Text(name2)
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

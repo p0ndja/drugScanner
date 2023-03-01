@@ -81,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 20.0,
                     ),
                     _registerButton(context),
-                    const Text('หรือเข้าสู่ระบบ'),
+                    const Text('หรือ'),
                     const SizedBox(
                       height: 5,
                     ),
