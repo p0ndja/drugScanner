@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.drug_scanner">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="drug_scanner"
         android:name="${applicationName}"

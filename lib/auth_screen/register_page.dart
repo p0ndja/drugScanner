@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';
+import '../elements/avatar_upload.dart';
 import '../app_screen/container.dart';
+import '../elements/custom_form.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -28,42 +29,19 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _avatarUpload(),
-                    inputBox('อีเมล', 250),
-                    inputBox('รหัสผ่าน', 250),
+                    const AvatarUpload(),
+                    const CustomForm(name: 'อีเมล', width: 250),
+                    const CustomForm(name: 'รหัสผ่าน', width: 250),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10.0),
-                          child: inputBox('ชื่อ', 170),
-                        ),
-                        inputBox('อายุ', 55),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          height: 35,
-                          width: 15,
-                          child: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Text('ปี'),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        inputBox('น้ำหนัก', 95),
+                        const CustomForm(name: 'วันเกิด', width: 125),
                         Container(
                           margin: const EdgeInsets.only(top: 20, right: 10.0),
                           height: 35,
-                          width: 25,
-                          child: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Text('กก.'),
-                          ),
+                          width: 10,
                         ),
-                        inputBox('ส่วนสูง', 95),
+                        const CustomForm(name: 'นํ้าหนัก', width: 80),
                         Container(
                           margin: const EdgeInsets.only(
                             top: 20,
@@ -72,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: 25,
                           child: const Align(
                             alignment: Alignment.centerRight,
-                            child: Text('ซม.'),
+                            child: Text('กก.'),
                           ),
                         ),
                       ],
@@ -101,11 +79,12 @@ Widget _registerButton(BuildContext context) {
     width: 250,
     child: ElevatedButton.icon(
         style:
-            ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
+            ElevatedButton.styleFrom(backgroundColor: const Color(0xff142F2F)),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const MainContainerWidget()),
+            MaterialPageRoute(
+                builder: (context) => const MainContainerWidget()),
           );
         },
         icon: const Icon(Icons.app_registration),
