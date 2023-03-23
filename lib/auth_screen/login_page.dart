@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../app_screen/container.dart';
 import 'register_page.dart';
+import '../elements/custom_form.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     iconApp,
-                    inputBox('อีเมล', 250),
-                    inputBox('รหัสผ่าน', 250),
+                    const CustomForm(name: 'อีเมล', width: 250),
+                    const CustomForm(name: 'รหัสผ่าน', width: 250),
                     _forgetPasswordButton(),
                     _loginButton(context),
                     const Text('หรือ'),
@@ -106,7 +107,7 @@ Widget _registerPageButton(BuildContext context) {
     width: 250,
     child: ElevatedButton.icon(
         style:
-            ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
+            ElevatedButton.styleFrom(backgroundColor: const Color(0xff142F2F)),
         onPressed: () {
           Navigator.push(
             context,

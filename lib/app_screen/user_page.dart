@@ -18,7 +18,9 @@ class _UserPageState extends State<UserPage> {
           leading: IconButton(
             iconSize: 35,
             icon: const Icon(Icons.arrow_back),
-            onPressed: () { Navigator.pop(context);},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           elevation: 0,
           backgroundColor: const Color(0xff008080),
@@ -128,7 +130,10 @@ Widget _saveButton(BuildContext context) {
     child: ElevatedButton.icon(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
-        onPressed: () { scafMsg(context, 'บันทึกข้อมูล'); Navigator.pop(context); },
+        onPressed: () {
+          scafMsg(context, 'บันทึกข้อมูล');
+          Navigator.pop(context);
+        },
         icon: const Icon(Icons.save_rounded),
         label: const Text('บันทึก')),
   );
@@ -141,7 +146,10 @@ Widget _logoutButton(BuildContext context) {
     child: ElevatedButton.icon(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xffD70000)),
-        onPressed: () { Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false); },
+        onPressed: () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/login', (route) => false);
+        },
         icon: const Icon(Icons.logout),
         label: const Text('ออกจากระบบ')),
   );
@@ -151,6 +159,6 @@ scafMsg(BuildContext context, String msg) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(msg),
-    duration: Duration(seconds: 1),
+    duration: const Duration(seconds: 1),
   ));
 }
