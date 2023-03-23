@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
                     inputBox('รหัสผ่าน', 250),
                     _forgetPasswordButton(),
                     _loginButton(context),
-                    const Text('หรือสมัครสมาชิก'),
+                    const Text('หรือ'),
                     const SizedBox(
                       height: 5,
                     ),

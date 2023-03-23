@@ -73,10 +73,10 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            BoxChoice('แดง',Icons.medical_services),
-                            BoxChoice('ฟ้า',Icons.medical_services),
-                            BoxChoice('ขาว',Icons.medical_services),
-                            BoxChoice('เหลือง',Icons.medical_services),
+                            BoxChoiceColorPill(Colors.red),
+                            BoxChoiceColorPill(Colors.blue),
+                            BoxChoiceColorPill(Colors.white),
+                            BoxChoiceColorPill(Colors.yellow),
                           ],
                         ),
                       ),
@@ -100,11 +100,11 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            BoxChoice('วงกลม',Icons.circle),
-                            BoxChoice('วงรี',Icons.egg_rounded),
-                            BoxChoice('แคปซูล',Icons.toggle_off),
-                            BoxChoice('สามเหลียม',Icons.play_arrow),
-                            BoxChoice('สี่เหลียม',Icons.square),
+                            BoxChoiceShapePill('วงกลม',Icons.circle),
+                            BoxChoiceShapePill('วงรี',Icons.egg_rounded),
+                            BoxChoiceShapePill('แคปซูล',Icons.toggle_off),
+                            BoxChoiceShapePill('สามเหลียม',Icons.play_arrow),
+                            BoxChoiceShapePill('สี่เหลียม',Icons.square),
                           ],
                         ),
                       ),
@@ -145,28 +145,28 @@ Widget _avatarUpload(BuildContext context) {
 
 
 
-class BoxChoice extends StatelessWidget {
-  final name,icon;
-  const BoxChoice(this.name, this.icon);
+class BoxChoiceColorPill extends StatelessWidget {
+  final color;
+  const BoxChoiceColorPill(this.color);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
       child: Material(
-        color: Colors.transparent,
+        color: Color(0xffeeeeee), //สีกล่อง
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Container(
+        child: Container( //กรอบ
           width: 100,
           height: 100,
           decoration: BoxDecoration(
-            color: Colors.white,
+            // color: Color(0xffeeeeee),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Column(
+          child: Column( //ของในกล่อง
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -174,7 +174,60 @@ class BoxChoice extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Color(0xFFF1F4F8),
+                  color: color,//Color(0xFFF1F4F8), //สีวงกลม
+                  shape: BoxShape.circle,
+                ),
+              //   child: Icon(
+              //     icon,
+              //     color: Color(0xFF95A1AC),
+              //     size: 32,
+              //   ),
+              // ),
+              // Padding(
+              //   padding:
+              //   EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+              //   child: Text(
+              //     name,style: TextStyle(color: color),
+              //   ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BoxChoiceShapePill extends StatelessWidget {
+  final name,icon;
+  const BoxChoiceShapePill(this.name, this.icon);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
+      child: Material(
+        color: Colors.transparent, //สีกล่อง
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Container( //กรอบ
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.white10,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column( //ของในกล่อง
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF1F4F8), //สีวงกลม
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
