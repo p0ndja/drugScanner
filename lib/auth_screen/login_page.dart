@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../app_screen/container.dart';
+// import '../app_screen/container.dart';
 import 'register_page.dart';
 import '../elements/custom_form.dart';
 
@@ -11,6 +12,41 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future<void> _signInWithEmail(String email, String password) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user == null) {
+          print('User is currently signed out!');
+        } else {
+          print('User is signed in!');
+        }
+      });
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+
+  void _submitForm() async {
+    _signInWithEmail(_emailController.text, _passwordController.text);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +66,17 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     iconApp,
-                    const CustomForm(name: 'อีเมล', width: 250),
-                    const CustomForm(name: 'รหัสผ่าน', width: 250),
+                    CustomForm(
+                      name: 'อีเมล',
+                      width: 250,
+                      textEditingController: _emailController,
+                    ),
+                    CustomForm(
+                        name: 'รหัสผ่าน',
+                        width: 250,
+                        textEditingController: _passwordController),
                     _forgetPasswordButton(),
-                    _loginButton(context),
+                    _loginButton(context, _submitForm),
                     const Text('หรือ'),
                     const SizedBox(
                       height: 5,
@@ -119,7 +162,7 @@ Widget _registerPageButton(BuildContext context) {
   );
 }
 
-Widget _loginButton(BuildContext context) {
+Widget _loginButton(BuildContext context, void Function() submitForm) {
   return Container(
     margin: const EdgeInsets.only(bottom: 5.0),
     width: 250,
@@ -127,7 +170,7 @@ Widget _loginButton(BuildContext context) {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
         onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+          submitForm();
         },
         icon: const Icon(Icons.login),
         label: const Text('เข้าสู่ระบบ')),

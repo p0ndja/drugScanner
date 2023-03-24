@@ -1,25 +1,59 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomForm extends StatefulWidget {
-  const CustomForm({Key? key, required this.name, required this.width})
+  const CustomForm(
+      {Key? key,
+      required this.name,
+      required this.width,
+      required this.textEditingController})
       : super(key: key);
 
   final String name;
   final double width;
+  final TextEditingController textEditingController;
 
   @override
   _CustomFormState createState() => _CustomFormState();
 }
 
 class _CustomFormState extends State<CustomForm> {
-  final myController = TextEditingController();
+  // final myController = widget.textEditingController;
+  late String email;
+  late String password;
+
   bool _obscureText = true;
   String _hintText = '';
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
     });
+  }
+
+  void submitForm() async {
+    if (widget.name == 'อีเมล') {
+      email = widget.textEditingController.text.trim();
+    }
+    if (widget.name == 'รหัสผ่าน') {
+      password = widget.textEditingController.text.trim();
+    }
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Navigate to next screen upon successful registration
+      // Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      // Handle any errors that occur during registration
+      print(e);
+      // Display an error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed. Please try again.')),
+      );
+    }
   }
 
   void _changeHintText() {
@@ -41,13 +75,6 @@ class _CustomFormState extends State<CustomForm> {
     // TODO: implement initState
     _changeHintText();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    myController.dispose();
-    super.dispose();
   }
 
   @override
@@ -85,14 +112,14 @@ class _CustomFormState extends State<CustomForm> {
                         DateFormat('yyyy-MM-dd').format(pickedDate);
 
                     setState(() {
-                      myController.text =
+                      widget.textEditingController.text =
                           formattedDate; //set output date to TextField value.
                     });
                   }
                 }
               },
               obscureText: (widget.name == 'รหัสผ่าน') ? _obscureText : false,
-              controller: myController,
+              controller: widget.textEditingController,
               decoration: InputDecoration(
                   hintText: _hintText,
                   suffixIcon: (widget.name == 'รหัสผ่าน')

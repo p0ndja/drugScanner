@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class AvatarUpload extends StatefulWidget {
   const AvatarUpload({Key? key}) : super(key: key);
@@ -14,6 +16,12 @@ class _AvatarUploadState extends State<AvatarUpload> {
   XFile? image;
 
   final ImagePicker picker = ImagePicker();
+
+  // void sendPost() {
+  //   final url = Uri.parse(
+  //       'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/user.json');
+  //   http.post(url, body: json.encode({'time': 'now'}));
+  // }
 
   //we can upload image from camera or from gallery based on parameter
   Future<void> getImage(ImageSource media) async {
@@ -75,6 +83,8 @@ class _AvatarUploadState extends State<AvatarUpload> {
         margin: const EdgeInsets.only(bottom: 20.0),
         child: GestureDetector(
           onTap: () {
+            // sendPost();
+
             myAlert();
             debugPrint('ddd');
           },

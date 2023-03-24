@@ -1,9 +1,18 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:drug_scanner/app_screen/container.dart';
 import 'package:flutter/material.dart';
 import 'auth_screen/login_page.dart';
 import 'auth_screen/register_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -19,7 +28,6 @@ class MyApp extends StatelessWidget {
           '/': (context) => const MainContainerWidget(),
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegisterPage(),
-        }
-    );
+        });
   }
 }

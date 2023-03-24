@@ -1,4 +1,5 @@
 import 'package:drug_scanner/elements/Avatar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import '../auth_screen/login_page.dart';
@@ -146,7 +147,17 @@ Widget _logoutButton(BuildContext context) {
     child: ElevatedButton.icon(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xffD70000)),
-        onPressed: () {
+        onPressed: () async {
+          await FirebaseAuth.instance.signOut();
+
+          FirebaseAuth.instance.authStateChanges().listen((User? user) {
+            if (user == null) {
+              print('User is currently signed out!');
+            } else {
+              print('User is signed in!');
+            }
+          });
+
           Navigator.pushNamedAndRemoveUntil(
               context, '/login', (route) => false);
         },

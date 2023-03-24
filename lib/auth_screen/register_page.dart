@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../elements/avatar_upload.dart';
-import '../app_screen/container.dart';
+
 import '../elements/custom_form.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -11,6 +16,66 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void sendPost(String email, String uid) {
+    final url = Uri.parse(
+        'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/$uid.json');
+    http.patch(url, body: json.encode({'email': email}));
+  }
+
+  Future<void> registerUser(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      sendPost(userCredential.user!.email.toString(), userCredential.user!.uid);
+
+      print('User account created successfully: ${userCredential.user!.uid}');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _submitForm() async {
+    try {
+      await registerUser(_emailController.text, _passwordController.text);
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user == null) {
+          print('User is currently signed out!');
+        } else {
+          print('User is signed in!');
+        }
+      });
+      // Navigate to next screen upon successful registration
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    } catch (e) {
+      // Handle any errors that occur during registration
+      print(e);
+      // Display an error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed. Please try again.')),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,18 +95,26 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const AvatarUpload(),
-                    const CustomForm(name: 'อีเมล', width: 250),
-                    const CustomForm(name: 'รหัสผ่าน', width: 250),
+                    CustomForm(
+                      name: 'อีเมล',
+                      width: 250,
+                      textEditingController: _emailController,
+                    ),
+                    CustomForm(
+                      name: 'รหัสผ่าน',
+                      width: 250,
+                      textEditingController: _passwordController,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const CustomForm(name: 'วันเกิด', width: 125),
+                        // const CustomForm(name: 'วันเกิด', width: 125),
                         Container(
                           margin: const EdgeInsets.only(top: 20, right: 10.0),
                           height: 35,
                           width: 10,
                         ),
-                        const CustomForm(name: 'นํ้าหนัก', width: 80),
+                        // const CustomForm(name: 'นํ้าหนัก', width: 80),
                         Container(
                           margin: const EdgeInsets.only(
                             top: 20,
@@ -58,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    _registerButton(context),
+                    _registerButton(context, _submitForm),
                     const Text('หรือ'),
                     const SizedBox(
                       height: 5,
@@ -73,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-Widget _registerButton(BuildContext context) {
+Widget _registerButton(BuildContext context, void Function() submitForm) {
   return Container(
     margin: const EdgeInsets.only(bottom: 5.0),
     width: 250,
@@ -81,11 +154,7 @@ Widget _registerButton(BuildContext context) {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff142F2F)),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const MainContainerWidget()),
-          );
+          submitForm();
         },
         icon: const Icon(Icons.app_registration),
         label: const Text('สมัครสมาชิก')),
@@ -105,32 +174,4 @@ Widget _loginPageButton(BuildContext context) {
         icon: const Icon(Icons.login),
         label: const Text('เข้าสู่ระบบ')),
   );
-}
-
-Widget _avatarUpload() {
-  return Container(
-      margin: const EdgeInsets.only(bottom: 20.0),
-      child: GestureDetector(
-        onTap: () {
-          debugPrint('ddd');
-        },
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 1)
-              ]),
-          child: CircleAvatar(
-            backgroundImage: null,
-            backgroundColor: Colors.grey[300],
-            radius: 90,
-            child: const Icon(
-              Icons.upload,
-              color: Colors.black38,
-              size: 40,
-            ),
-          ),
-        ),
-      ));
 }

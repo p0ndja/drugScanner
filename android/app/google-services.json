@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "1058274849558",
+    "project_id": "drugscanner-ae525",
+    "storage_bucket": "drugscanner-ae525.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058274849558:android:5fd40f7334fa371bf99637",
+        "android_client_info": {
+          "package_name": "MAD.DrugScanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058274849558-r3imtlmpt8abulciduo7mjkkcfjqqgdk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ5UQOt9pVPcRGe9s57zFXSbO3fhHK9_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058274849558-r3imtlmpt8abulciduo7mjkkcfjqqgdk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1058274849558-s35vf4jl8svi6q5pr4o5omk2qk8b3tjr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.drugScanner"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058274849558:android:16eec452319ebe2af99637",
+        "android_client_info": {
+          "package_name": "com.example.drug_scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058274849558-r3imtlmpt8abulciduo7mjkkcfjqqgdk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ5UQOt9pVPcRGe9s57zFXSbO3fhHK9_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058274849558-r3imtlmpt8abulciduo7mjkkcfjqqgdk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1058274849558-s35vf4jl8svi6q5pr4o5omk2qk8b3tjr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.drugScanner"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
