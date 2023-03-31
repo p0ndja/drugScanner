@@ -1,9 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+
+XFile? image;
+Future uploadImg() async {
+  if (image == null) return null;
+
+  final storageRef = FirebaseStorage.instance.ref();
+  final picRef = storageRef.child(image!.name);
+  final picImgRef = storageRef.child(image!.path);
+  assert(picRef.name == picImgRef.name);
+  assert(picRef.fullPath != picImgRef.fullPath);
+  try {
+    await picRef.putFile(File(picImgRef.fullPath));
+    return await picRef.getDownloadURL();
+  } on FirebaseException catch (e) {
+    print('error: $e');
+  }
+}
 
 class AvatarUpload extends StatefulWidget {
   const AvatarUpload({Key? key}) : super(key: key);
@@ -13,7 +31,6 @@ class AvatarUpload extends StatefulWidget {
 }
 
 class _AvatarUploadState extends State<AvatarUpload> {
-  XFile? image;
 
   final ImagePicker picker = ImagePicker();
 

@@ -19,10 +19,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void sendPost(String email, String uid) {
+  void sendPost(Map jsonData, String uid) {
     final url = Uri.parse(
         'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/$uid.json');
-    http.patch(url, body: json.encode({'email': email}));
+    http.patch(url, body: json.encode(jsonData));
   }
 
   Future<void> registerUser(String email, String password) async {
@@ -32,8 +32,8 @@ class _RegisterPageState extends State<RegisterPage> {
         email: email,
         password: password,
       );
-
-      sendPost(userCredential.user!.email.toString(), userCredential.user!.uid);
+      String imgPath = await uploadImg();
+      sendPost({'email': userCredential.user!.email.toString(), 'img': imgPath}, userCredential.user!.uid);
 
       print('User account created successfully: ${userCredential.user!.uid}');
     } on FirebaseAuthException catch (e) {
