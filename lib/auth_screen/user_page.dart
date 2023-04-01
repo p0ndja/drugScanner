@@ -10,17 +10,6 @@ import '../elements/avatar_upload.dart';
 import 'login_page.dart';
 import '../elements/custom_form.dart';
 
-class Profile {
-  final String image, name, email, weight, birthdate;
-
-  Profile({
-    required this.image,
-    required this.name,
-    required this.email,
-    required this.weight,
-    required this.birthdate,
-  });
-}
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);

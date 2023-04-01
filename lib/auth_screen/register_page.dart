@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../elements/User.dart';
 import '../elements/avatar_upload.dart';
 
 import '../elements/custom_form.dart';
@@ -41,8 +42,8 @@ class _RegisterPageState extends State<RegisterPage> {
         'birthdate': _birthdateController.text.trim(),
         'weight': _weightController.text.trim()
       }, userCredential.user!.uid);
-
       print('User account created successfully: ${userCredential.user!.uid}');
+      await assignGlobalAuthedUser();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');

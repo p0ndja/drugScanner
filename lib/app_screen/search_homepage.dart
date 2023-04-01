@@ -3,6 +3,9 @@ import 'package:drug_scanner/auth_screen/user_page.dart';
 import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:flutter/material.dart';
 
+import '../elements/Date.dart';
+import '../elements/User.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -29,10 +32,10 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _avatarUpload(context),
-                  Text('Fordranger Raptor',
+                  Text(globalAuthedUser?.name ?? 'User',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                  Text('อายุ 25 ปี ส่วนสูง 163 ซม. น้ำหนัก 55 กก.'),
+                  Text('${globalAuthedUser?.birthdate != null ? 'อายุ ${ageYear(ageParse(globalAuthedUser?.birthdate ?? "1999-01-01"))} ปี ' : ''}น้ำหนัก ${globalAuthedUser?.weight} กิโลกรัม'),
                   Container(
                     color: Colors.black12,
                     margin: EdgeInsets.all(10),
@@ -135,7 +138,7 @@ Widget _avatarUpload(BuildContext context) {
               boxShadow: [
                 BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 1)
               ]),
-          child: UserCircleAvatar(imageUrl: URLPath),
+          child: UserCircleAvatar(imageUrl: globalAuthedUser?.image ?? ""),
         ),
       ));
 }

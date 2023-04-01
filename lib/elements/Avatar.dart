@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-String URLPath = "https://media.discordapp.net/attachments/878460741852749844/1080214463925457027/FEB4C267-B549-4AB6-BACC-BE0A5749FE85.jpg";
+String URLPath = "https://sunsetanytime.com/wp-content/uploads/2022/09/White-Background-Placeholder-Person.jpg";
 
 class UserCircleAvatar extends StatelessWidget {
   final String imageUrl;
