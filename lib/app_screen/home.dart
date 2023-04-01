@@ -1,4 +1,4 @@
-import 'package:drug_scanner/app_screen/user_page.dart';
+import 'package:drug_scanner/auth_screen/user_page.dart';
 import 'package:flutter/material.dart';
 
 import '../elements/Avatar.dart';
@@ -24,11 +24,8 @@ Widget _avatarUpload(BuildContext context) {
       margin: const EdgeInsets.only(bottom: 20.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const UserPage())
-          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const UserPage()));
         },
         child: Container(
           decoration: const BoxDecoration(
@@ -39,6 +36,5 @@ Widget _avatarUpload(BuildContext context) {
               ]),
           child: UserCircleAvatar(imageUrl: URLPath),
         ),
-      )
-  );
+      ));
 }

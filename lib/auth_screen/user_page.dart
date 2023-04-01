@@ -1,8 +1,26 @@
+import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import '../auth_screen/login_page.dart';
+import '../elements/avatar_upload.dart';
+import 'login_page.dart';
+import '../elements/custom_form.dart';
+
+class Profile {
+  final String image, name, email, weight, birthdate;
+
+  Profile({
+    required this.image,
+    required this.name,
+    required this.email,
+    required this.weight,
+    required this.birthdate,
+  });
+}
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -12,6 +30,63 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _birthdateController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _birthdateController.dispose();
+    _weightController.dispose();
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> getUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String idToken = await user!.getIdToken();
+
+    print(idToken);
+    // print(user.uid);
+    Uri url = Uri.parse(
+        'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user.uid}.json');
+
+    http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // print(response.statusCode);
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      setState(() {
+        _emailController.text = data["email"];
+        _passwordController.text = data["email"];
+        _nameController.text = data["name"];
+        _weightController.text = data["weight"];
+        _birthdateController.text = data["birthdate"];
+      });
+
+      // Extract the profile data from the response
+      // ...
+    } else {
+      print('error response.statusCode != 200');
+      // Handle errors
+      // ...
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    getUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,42 +117,45 @@ class _UserPageState extends State<UserPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _avatarUpload(context),
-                    inputBox('อีเมล', 250),
-                    inputBox('รหัสผ่าน', 250),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10.0),
-                          child: inputBox('ชื่อ', 170),
-                        ),
-                        inputBox('อายุ', 55),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          height: 35,
-                          width: 15,
-                          child: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Text('ปี'),
-                          ),
-                        )
-                      ],
+                    const AvatarUpload(),
+                    // _avatarUpload(context),
+                    // inputBox('อีเมล', 250),
+                    // inputBox('รหัสผ่าน', 250),
+                    CustomForm(
+                      name: 'อีเมล',
+                      width: 250,
+                      textEditingController: _emailController,
+                    ),
+                    // CustomForm(
+                    //   name: 'รหัสผ่าน',
+                    //   width: 250,
+                    //   textEditingController: _passwordController,
+                    // ),
+                    CustomForm(
+                      name: 'ชื่อ',
+                      width: 250,
+                      textEditingController: _nameController,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        inputBox('น้ำหนัก', 95),
+                        CustomForm(
+                          name: 'วันเกิด',
+                          width: 125,
+                          textEditingController: _birthdateController,
+                        ),
+                        // const CustomForm(name: 'วันเกิด', width: 125),
                         Container(
                           margin: const EdgeInsets.only(top: 20, right: 10.0),
                           height: 35,
-                          width: 25,
-                          child: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Text('กก.'),
-                          ),
+                          width: 10,
                         ),
-                        inputBox('ส่วนสูง', 95),
+                        CustomForm(
+                          name: 'นํ้าหนัก',
+                          width: 80,
+                          textEditingController: _weightController,
+                        ),
+                        // const CustomForm(name: 'นํ้าหนัก', width: 80),
                         Container(
                           margin: const EdgeInsets.only(
                             top: 20,
@@ -86,15 +164,16 @@ class _UserPageState extends State<UserPage> {
                           width: 25,
                           child: const Align(
                             alignment: Alignment.centerRight,
-                            child: Text('ซม.'),
+                            child: Text('กก.'),
                           ),
                         ),
                       ],
                     ),
+
                     const SizedBox(
                       height: 20.0,
                     ),
-                    _saveButton(context),
+                    _saveButton(context, getUser),
                     _logoutButton(context)
                   ],
                 ),
@@ -124,7 +203,7 @@ Widget _avatarUpload(context) {
       ));
 }
 
-Widget _saveButton(BuildContext context) {
+Widget _saveButton(BuildContext context, Function() getUser) {
   return Container(
     margin: const EdgeInsets.only(bottom: 5.0),
     width: 250,
@@ -133,6 +212,7 @@ Widget _saveButton(BuildContext context) {
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
         onPressed: () {
           scafMsg(context, 'บันทึกข้อมูล');
+          // getUser();
           Navigator.pop(context);
         },
         icon: const Icon(Icons.save_rounded),

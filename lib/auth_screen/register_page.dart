@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../elements/avatar_upload.dart';
 
@@ -18,8 +17,11 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _weightController = TextEditingController();
+  final _birthdateController = TextEditingController();
 
-  void sendPost(Map jsonData, String uid) {
+  void sendPatch(Map jsonData, String uid) {
     final url = Uri.parse(
         'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/$uid.json');
     http.patch(url, body: json.encode(jsonData));
@@ -33,7 +35,12 @@ class _RegisterPageState extends State<RegisterPage> {
         password: password,
       );
       String imgPath = await uploadImg();
-      sendPost({'email': userCredential.user!.email.toString(), 'img': imgPath}, userCredential.user!.uid);
+      sendPatch({
+        'email': userCredential.user!.email.toString(),
+        'img': imgPath,
+        'birthdate': _birthdateController.text.trim(),
+        'weight': _weightController.text.trim()
+      }, userCredential.user!.uid);
 
       print('User account created successfully: ${userCredential.user!.uid}');
     } on FirebaseAuthException catch (e) {
@@ -73,6 +80,9 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _birthdateController.dispose();
+    _weightController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -105,14 +115,29 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 250,
                       textEditingController: _passwordController,
                     ),
+                    CustomForm(
+                      name: 'ชื่อ',
+                      width: 250,
+                      textEditingController: _nameController,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        CustomForm(
+                          name: 'วันเกิด',
+                          width: 125,
+                          textEditingController: _birthdateController,
+                        ),
                         // const CustomForm(name: 'วันเกิด', width: 125),
                         Container(
                           margin: const EdgeInsets.only(top: 20, right: 10.0),
                           height: 35,
                           width: 10,
+                        ),
+                        CustomForm(
+                          name: 'นํ้าหนัก',
+                          width: 80,
+                          textEditingController: _weightController,
                         ),
                         // const CustomForm(name: 'นํ้าหนัก', width: 80),
                         Container(

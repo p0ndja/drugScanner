@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 XFile? image;
 Future uploadImg() async {
@@ -24,21 +23,16 @@ Future uploadImg() async {
 }
 
 class AvatarUpload extends StatefulWidget {
-  const AvatarUpload({Key? key}) : super(key: key);
+  const AvatarUpload({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _AvatarUploadState createState() => _AvatarUploadState();
 }
 
 class _AvatarUploadState extends State<AvatarUpload> {
-
   final ImagePicker picker = ImagePicker();
-
-  // void sendPost() {
-  //   final url = Uri.parse(
-  //       'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/user.json');
-  //   http.post(url, body: json.encode({'time': 'now'}));
-  // }
 
   //we can upload image from camera or from gallery based on parameter
   Future<void> getImage(ImageSource media) async {
@@ -46,6 +40,17 @@ class _AvatarUploadState extends State<AvatarUpload> {
 
     setState(() {
       image = img;
+    });
+  }
+
+  Future<void> setImage(String url) async {
+    final File file = File(
+        "https://firebasestorage.googleapis.com/v0/b/drugscanner-ae525.appspot.com/o/162d8180-7336-4643-9324-6fdf38209c9f1280903803224199469.jpg?alt=media&token=08bd7106-5a7b-4893-86b2-f5311f7b25ce");
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = await file.copy('${tempDir.path}/image.jpg');
+
+    setState(() {
+      image = XFile(tempFile.path);
     });
   }
 
@@ -100,10 +105,7 @@ class _AvatarUploadState extends State<AvatarUpload> {
         margin: const EdgeInsets.only(bottom: 20.0),
         child: GestureDetector(
           onTap: () {
-            // sendPost();
-
             myAlert();
-            debugPrint('ddd');
           },
           child: Container(
             decoration: const BoxDecoration(

@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _submitForm() async {
+  void _submitForm() {
     _signInWithEmail(_emailController.text, _passwordController.text);
   }
 

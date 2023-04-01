@@ -1,9 +1,7 @@
-
 import 'package:drug_scanner/app_screen/search_result_page.dart';
-import 'package:drug_scanner/app_screen/user_page.dart';
+import 'package:drug_scanner/auth_screen/user_page.dart';
 import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:flutter/material.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,13 +11,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
+        resizeToAvoidBottomInset: false,
+        body: Stack(children: [
           FractionallySizedBox(
             widthFactor: 1, // between 0 and 1
             heightFactor: 0.3,
@@ -28,95 +24,99 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _avatarUpload(context),
-                    Text('Fordranger Raptor',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
-                    Text('อายุ 25 ปี ส่วนสูง 163 ซม. น้ำหนัก 55 กก.'),
-                    Container(
-                      color: Colors.black12,
-                      margin: EdgeInsets.all(10),
-                      child: Center(
-                        child: TextField(
-                          decoration: InputDecoration(
-                              prefix: const Padding(padding: EdgeInsets.only(left: 15)),
-                              hintText: 'ค้นหาด้วยชื่อยา...',
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.search),
-                                color: const Color(0xff008080),
-                                iconSize: 30,
-                                onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (builder) => SearchPage())); },
-                              ),
-                              border: InputBorder.none
-                          ),
-                        ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _avatarUpload(context),
+                  Text('Fordranger Raptor',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  Text('อายุ 25 ปี ส่วนสูง 163 ซม. น้ำหนัก 55 กก.'),
+                  Container(
+                    color: Colors.black12,
+                    margin: EdgeInsets.all(10),
+                    child: Center(
+                      child: TextField(
+                        decoration: InputDecoration(
+                            prefix: const Padding(
+                                padding: EdgeInsets.only(left: 15)),
+                            hintText: 'ค้นหาด้วยชื่อยา...',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.search),
+                              color: const Color(0xff008080),
+                              iconSize: 30,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) => SearchPage()));
+                              },
+                            ),
+                            border: InputBorder.none),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'สีของเม็ดยา',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(
-                            'สีของเม็ดยา',
-                            style: TextStyle(fontSize: 15),
-                          ),
+                          BoxChoiceColorPill(Colors.red),
+                          BoxChoiceColorPill(Colors.blue),
+                          BoxChoiceColorPill(Colors.white),
+                          BoxChoiceColorPill(Colors.yellow),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            BoxChoiceColorPill(Colors.red),
-                            BoxChoiceColorPill(Colors.blue),
-                            BoxChoiceColorPill(Colors.white),
-                            BoxChoiceColorPill(Colors.yellow),
-                          ],
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'ลักษณะของเม็ดยา',
+                          style: TextStyle(fontSize: 15),
                         ),
-                      ),
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(
-                            'ลักษณะของเม็ดยา',
-                            style: TextStyle(fontSize: 15),
-                          ),
+                          BoxChoiceShapePill('วงกลม', Icons.circle),
+                          BoxChoiceShapePill('วงรี', Icons.egg_rounded),
+                          BoxChoiceShapePill('แคปซูล', Icons.toggle_off),
+                          BoxChoiceShapePill('สามเหลียม', Icons.play_arrow),
+                          BoxChoiceShapePill('สี่เหลียม', Icons.square),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            BoxChoiceShapePill('วงกลม',Icons.circle),
-                            BoxChoiceShapePill('วงรี',Icons.egg_rounded),
-                            BoxChoiceShapePill('แคปซูล',Icons.toggle_off),
-                            BoxChoiceShapePill('สามเหลียม',Icons.play_arrow),
-                            BoxChoiceShapePill('สี่เหลียม',Icons.square),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
           ),
-        ]
-      )
-    );
+        ]));
   }
 }
 
@@ -125,11 +125,8 @@ Widget _avatarUpload(BuildContext context) {
       margin: const EdgeInsets.only(bottom: 20.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const UserPage())
-          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const UserPage()));
         },
         child: Container(
           decoration: const BoxDecoration(
@@ -142,8 +139,6 @@ Widget _avatarUpload(BuildContext context) {
         ),
       ));
 }
-
-
 
 class BoxChoiceColorPill extends StatelessWidget {
   final color;
@@ -159,14 +154,16 @@ class BoxChoiceColorPill extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Container( //กรอบ
+        child: Container(
+          //กรอบ
           width: 100,
           height: 100,
           decoration: BoxDecoration(
             // color: Color(0xffeeeeee),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Column( //ของในกล่อง
+          child: Column(
+            //ของในกล่อง
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -174,21 +171,21 @@ class BoxChoiceColorPill extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: color,//Color(0xFFF1F4F8), //สีวงกลม
+                  color: color, //Color(0xFFF1F4F8), //สีวงกลม
                   shape: BoxShape.circle,
                 ),
-              //   child: Icon(
-              //     icon,
-              //     color: Color(0xFF95A1AC),
-              //     size: 32,
-              //   ),
-              // ),
-              // Padding(
-              //   padding:
-              //   EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
-              //   child: Text(
-              //     name,style: TextStyle(color: color),
-              //   ),
+                //   child: Icon(
+                //     icon,
+                //     color: Color(0xFF95A1AC),
+                //     size: 32,
+                //   ),
+                // ),
+                // Padding(
+                //   padding:
+                //   EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+                //   child: Text(
+                //     name,style: TextStyle(color: color),
+                //   ),
               ),
             ],
           ),
@@ -199,7 +196,7 @@ class BoxChoiceColorPill extends StatelessWidget {
 }
 
 class BoxChoiceShapePill extends StatelessWidget {
-  final name,icon;
+  final name, icon;
   const BoxChoiceShapePill(this.name, this.icon);
 
   @override
@@ -212,14 +209,16 @@ class BoxChoiceShapePill extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Container( //กรอบ
+        child: Container(
+          //กรอบ
           width: 100,
           height: 100,
           decoration: BoxDecoration(
             color: Colors.white10,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Column( //ของในกล่อง
+          child: Column(
+            //ของในกล่อง
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -237,8 +236,7 @@ class BoxChoiceShapePill extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding:
-                EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                 child: Text(
                   name,
                 ),

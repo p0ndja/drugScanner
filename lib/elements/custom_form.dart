@@ -66,6 +66,8 @@ class _CustomFormState extends State<CustomForm> {
         _hintText = 'กรอกรหัสผ่าน';
       } else if (widget.name == 'นํ้าหนัก') {
         _hintText = 'กรอกนํ้าหนัก';
+      } else if (widget.name == 'ชื่อ') {
+        _hintText = 'กรอกชื่อ';
       }
     });
   }
