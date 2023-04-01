@@ -47,9 +47,5 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ใช้ในการค้นหา</string>
-	<key>NSCameraUsageDescription</key>
-	<string>ใช้ในการค้นหา</string>
 </dict>
 </plist>
