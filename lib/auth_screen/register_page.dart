@@ -45,11 +45,43 @@ class _RegisterPageState extends State<RegisterPage> {
       print('User account created successfully: ${userCredential.user!.uid}');
       await assignGlobalAuthedUser();
     } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      Navigator.of(context).pop();
+      String errorMessage = e.code;
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        errorMessage = 'รหัสผ่านของคุณอ่อนแอเกินไป';
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        errorMessage = 'อีเมลนี้ได้ลงทะเบียนไว้อยู่แล้ว';
+      } else {
+        errorMessage = e.code;
       }
+      showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              // The background color
+              title: const Text('พบข้อผิดพลาด'),
+              backgroundColor: Colors.white,
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(errorMessage),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          }
+      );
     } catch (e) {
       print(e);
     }
@@ -57,6 +89,32 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _submitForm() async {
     try {
+      showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('กำลังโหลด...')
+                  ],
+                ),
+              ),
+            );
+          }
+      );
       await registerUser(_emailController.text, _passwordController.text);
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
@@ -65,14 +123,41 @@ class _RegisterPageState extends State<RegisterPage> {
           print('User is signed in!');
         }
       });
+      Navigator.pop(context);
       // Navigate to next screen upon successful registration
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } catch (e) {
       // Handle any errors that occur during registration
       print(e);
       // Display an error message to the user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed. Please try again.')),
+      Navigator.pop(context);
+      Navigator.of(context).pop();
+      showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              // The background color
+              title: const Text('พบข้อผิดพลาด'),
+              backgroundColor: Colors.white,
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text("พบข้อผิดพลาดที่ไม่ทราบสาเหตุ โปรดลองใหม่อีกครั้งในภายหลัง"),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          }
       );
     }
   }

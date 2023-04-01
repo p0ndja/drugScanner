@@ -17,10 +17,6 @@ class Profile {
 }
 
 Future<Profile?> assignGlobalAuthedUser() async {
-  if (globalAuthedUser != null) {
-    return globalAuthedUser;
-  }
-
   FirebaseAuth auth = FirebaseAuth.instance;
   User? user = auth.currentUser;
   String idToken = await user!.getIdToken();

@@ -231,11 +231,37 @@ Widget _saveButton(BuildContext context, Function() changeInfoUser) {
     child: ElevatedButton.icon(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
-        onPressed: () {
+        onPressed: () async {
+          showDialog(
+            // The user CANNOT close this dialog  by pressing outsite it
+              barrierDismissible: false,
+              context: context,
+              builder: (_) {
+                return Dialog(
+                  // The background color
+                  backgroundColor: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        // The loading indicator
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // Some text
+                        Text('กำลังโหลด...')
+                      ],
+                    ),
+                  ),
+                );
+              }
+          );
+          await changeInfoUser();
           scafMsg(context, 'บันทึกข้อมูล');
-          changeInfoUser();
           // getUser();
-          Navigator.pop(context);
+          Navigator.of(context).popUntil((route) => route.isFirst);
         },
         icon: const Icon(Icons.save_rounded),
         label: const Text('บันทึก')),

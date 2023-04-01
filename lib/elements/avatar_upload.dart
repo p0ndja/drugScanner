@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:drug_scanner/elements/User.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-XFile? image;
+import 'Avatar.dart';
+XFile? image = XFile(globalAuthedUser?.image ?? URLPath);
+
 Future uploadImg() async {
-  if (image == null) return null;
+  if (image == null || image!.path.toString().startsWith("http")) return null;
 
   final storageRef = FirebaseStorage.instance.ref();
   final picRef = storageRef.child(image!.name);
@@ -120,13 +123,19 @@ class _AvatarUploadState extends State<AvatarUpload> {
                 radius: 90,
                 child: ClipOval(
                   child: image != null
-                      ? Image.file(
-                          //to show image, you type like this.
-                          File(image!.path),
-                          fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width,
-                          height: 300,
-                        )
+                      ? (image!.path.toString().startsWith("http") ? Image.network(
+                    //to show image, you type like this.
+                    image!.path,
+                    fit: BoxFit.cover,
+                    width: MediaQuery.of(context).size.width,
+                    height: 300,
+                  ) : Image.file(
+                    //to show image, you type like this.
+                    File(image!.path),
+                    fit: BoxFit.cover,
+                    width: MediaQuery.of(context).size.width,
+                    height: 300,
+                  ))
                       : const Icon(
                           Icons.upload,
                           color: Colors.black38,
