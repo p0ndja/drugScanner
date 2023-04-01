@@ -6,10 +6,10 @@ import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+import '../elements/User.dart';
 import '../elements/avatar_upload.dart';
 import 'login_page.dart';
 import '../elements/custom_form.dart';
-
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -33,6 +33,38 @@ class _UserPageState extends State<UserPage> {
     _weightController.dispose();
     _nameController.dispose();
     super.dispose();
+  }
+
+  void sendPatch(Map jsonData, String uid) {
+    final url = Uri.parse(
+        'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/$uid.json');
+    http.patch(url, body: json.encode(jsonData));
+  }
+
+  Future<void> changeInfoUser() async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User? user = auth.currentUser;
+      String idToken = await user!.getIdToken();
+      String imgPath = await uploadImg();
+      sendPatch({
+        'email': user.email.toString(),
+        'img': imgPath,
+        'name': _nameController.text,
+        'birthdate': _birthdateController.text.trim(),
+        'weight': _weightController.text.trim()
+      }, user.uid);
+
+      await assignGlobalAuthedUser();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> getUser() async {
@@ -162,7 +194,7 @@ class _UserPageState extends State<UserPage> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    _saveButton(context, getUser),
+                    _saveButton(context, changeInfoUser),
                     _logoutButton(context)
                   ],
                 ),
@@ -192,7 +224,7 @@ Widget _avatarUpload(context) {
       ));
 }
 
-Widget _saveButton(BuildContext context, Function() getUser) {
+Widget _saveButton(BuildContext context, Function() changeInfoUser) {
   return Container(
     margin: const EdgeInsets.only(bottom: 5.0),
     width: 250,
@@ -201,6 +233,7 @@ Widget _saveButton(BuildContext context, Function() getUser) {
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
         onPressed: () {
           scafMsg(context, 'บันทึกข้อมูล');
+          changeInfoUser();
           // getUser();
           Navigator.pop(context);
         },
