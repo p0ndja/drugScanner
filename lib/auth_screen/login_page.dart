@@ -51,9 +51,9 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           print('User is signed in!');
         }
-        Navigator.of(context).pop();
       });
       await assignGlobalAuthedUser();
+      Navigator.of(context).pop();
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } on FirebaseAuthException catch (e) {
       Navigator.of(context).pop();
