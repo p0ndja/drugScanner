@@ -11,8 +11,10 @@ import 'Avatar.dart';
 XFile? image = XFile(globalAuthedUser?.image ?? URLPath);
 
 Future uploadImg() async {
-  if (image == null || image!.path.toString().startsWith("http")) {
-    return globalAuthedUser?.image;
+  if (image == null) {
+    return URLPath;
+  } else if (image!.path.toString().startsWith("http")) {
+    return image!.path;
   }
 
   final storageRef = FirebaseStorage.instance.ref();
@@ -46,17 +48,6 @@ class _AvatarUploadState extends State<AvatarUpload> {
 
     setState(() {
       image = img;
-    });
-  }
-
-  Future<void> setImage(String url) async {
-    final File file = File(
-        "https://firebasestorage.googleapis.com/v0/b/drugscanner-ae525.appspot.com/o/162d8180-7336-4643-9324-6fdf38209c9f1280903803224199469.jpg?alt=media&token=08bd7106-5a7b-4893-86b2-f5311f7b25ce");
-    final tempDir = await getTemporaryDirectory();
-    final tempFile = await file.copy('${tempDir.path}/image.jpg');
-
-    setState(() {
-      image = XFile(tempFile.path);
     });
   }
 
