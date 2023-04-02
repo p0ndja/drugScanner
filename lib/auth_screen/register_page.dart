@@ -37,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       String imgPath = await uploadImg();
       sendPatch({
-        'name': userCredential.user!.displayName.toString(),
+        'name': _nameController.text.trim(),
         'email': userCredential.user!.email.toString(),
         'img': imgPath,
         'birthdate': _birthdateController.text.trim(),
