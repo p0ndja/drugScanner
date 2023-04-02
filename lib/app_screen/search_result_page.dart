@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DrugDataModel {
-  final String image, name, thaiName, prop, use, storage;
-
-  DrugDataModel(
-      this.image, this.prop, this.use, this.storage, this.name, this.thaiName);
+  final String? image;
+  final String name, usedFor, color, shape;
+  final List alias, type, usage;
+  DrugDataModel({
+    required this.image,
+    required this.name,
+    required this.usedFor,
+    required this.color,
+    required this.shape,
+    required this.alias,
+    required this.type,
+    required this.usage,
+  });
 }
 
 class DrugDetail extends StatelessWidget {
@@ -56,7 +67,6 @@ class DrugDetail extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Column(
                             children: [
-                              Text(drugDataModel.thaiName),
                               Text(drugDataModel.name)
                             ],
                           )
@@ -88,116 +98,34 @@ class DrugDetail extends StatelessWidget {
 }
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  final String? search;
+  const SearchPage({Key? key, required this.search}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
+
 class _SearchPageState extends State<SearchPage> {
-  static List<String> drugImage = [
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-  ];
-  static List<String> drugName = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugThaiName = [
-    'TYLENOL 500 mg.adasdasdsadsaadsa',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugProp = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugUse = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugStro = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  final List<DrugDataModel> drugData = List.generate(
-      drugName.length,
-      (index) => DrugDataModel(
-          drugImage[index],
-          drugName[index],
-          drugThaiName[index],
-          drugProp[index],
-          drugUse[index],
-          drugStro[index]));
+  final searchField = TextEditingController();
+  List<DrugDataModel> drugData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getDrugData(widget.search, null, null, null);
+    searchField.text = widget.search??'';
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () { Navigator.pop(context); }
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () { Navigator.pop(context); }
             ),
             backgroundColor: const Color(0xff008080),
             floating: true,
@@ -220,6 +148,7 @@ class _SearchPageState extends State<SearchPage> {
                 color: Colors.white,
                 child: Center(
                   child: TextField(
+                    controller: searchField,
                     decoration: InputDecoration(
                         prefix: const Padding(padding: EdgeInsets.only(left: 15)),
                         hintText: 'ค้นหาด้วยชื่อยา...',
@@ -237,41 +166,75 @@ class _SearchPageState extends State<SearchPage> {
           ),
           SliverToBoxAdapter(
               child: Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: Text(
-                'พบผลการค้นหาทั้งหมด: ${drugData.length} รายการ',
-                style: const TextStyle(fontSize: 18),
-              ),
-            ),
-          )),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text(
+                    'พบผลการค้นหาทั้งหมด: ${drugData.length} รายการ',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ),
+              )),
           SliverList( //เริ่มลิสยา
             delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
+            SliverChildBuilderDelegate((BuildContext context, int index) {
               return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            DrugDetail(drugDataModel: drugData[index])));
-                  },
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          BoxOfPill(drugData[index].image, 'ชื่อยา: ${drugData[index].name}', 'ชื่อยา: ${drugData[index].name}')
-                        ],
-                      ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          DrugDetail(drugDataModel: drugData[index])));
+                },
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        BoxOfPill(drugData[index].image, 'ชื่อยา: ${drugData[index].name}', 'ชื่อยา: ${drugData[index].name}')
+                      ],
                     ),
                   ),
+                ),
               );
             }, childCount: drugData.length),
           ),
         ],
       ),
     );
+  }
+  Future<void> getDrugData(String? search, String? type, String? color, String? shape) async {
+    List<DrugDataModel> drugs = [];
+    String baseURL = 'https://sv1.p0nd.dev/drugScanner/?';
+    if (search != null) {
+      baseURL += '&search=$search';
+    } else if (type != null) {
+      baseURL += '&type=$type';
+    } else if (color != null) {
+      baseURL += '&color=$color';
+    } else if (shape != null) {
+      baseURL += '&shape=$shape';
+    }
+    Uri url = Uri.parse(baseURL);
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      // print(response.statusCode);
+      Map<String, dynamic> data = jsonDecode(response.body);
+      data.forEach((key, value) {
+        drugs.add(DrugDataModel(
+            name: value["name"],
+            image: "https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png",
+            type: value["type"],
+            color: value["appearance"]["color"],
+            shape: value["appearance"]["shape"],
+            alias: value["alias"],
+            usedFor: value["for"],
+            usage: value["usage"]
+        ));
+      });
+    }
+    setState(() {
+      drugData = drugs;
+    });
   }
 }
 
@@ -290,7 +253,7 @@ class BoxOfPill extends StatelessWidget {
           borderRadius: BorderRadius.circular(8), //ขอบโค้ง
         ),
         child: Container(
-          width: 350,
+          width: 300,
           height: 125,
           decoration: BoxDecoration(
             color: Colors.white,

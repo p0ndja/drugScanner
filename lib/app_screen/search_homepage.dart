@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _searchField = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -51,6 +52,7 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.all(10),
                     child: Center(
                       child: TextField(
+                        controller: _searchField,
                         decoration: InputDecoration(
                             prefix: const Padding(
                                 padding: EdgeInsets.only(left: 15)),
@@ -63,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (builder) => SearchPage()));
+                                        builder: (builder) => SearchPage(search: _searchField.text)));
                               },
                             ),
                             border: InputBorder.none),
