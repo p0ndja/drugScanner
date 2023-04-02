@@ -1,6 +1,8 @@
 import 'package:drug_scanner/app_screen/search_result_page.dart';
 import 'package:flutter/material.dart';
 
+List<DrugDataModel> drugData = [];
+
 class DrugDetail extends StatelessWidget {
   const DrugDetail({Key? key, required this.drugDataModel}) : super(key: key);
   final DrugDataModel drugDataModel;
@@ -50,7 +52,6 @@ class DrugDetail extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: Column(
                               children: [
-                                Text(drugDataModel.thaiName),
                                 Text(drugDataModel.name)
                               ],
                             )
@@ -89,100 +90,6 @@ class BookmarkPage extends StatefulWidget {
 }
 
 class _BookmarkPageState extends State<BookmarkPage> {
-  static List<String> drugImage = [
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-    'https://picsum.photos/250?image=9',
-  ];
-  static List<String> drugName = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugThaiName = [
-    'TYLENOL 500 mg.adasdasdsadsaadsa',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugProp = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugUse = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  static List<String> drugStro = [
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-    'TYLENOL 500 mg.',
-  ];
-  final List<DrugDataModel> drugData = List.generate(
-      drugName.length,
-          (index) => DrugDataModel(
-          drugImage[index],
-          drugName[index],
-          drugThaiName[index],
-          drugProp[index],
-          drugUse[index],
-          drugStro[index]));
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
