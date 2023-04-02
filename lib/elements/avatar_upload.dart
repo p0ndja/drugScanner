@@ -122,25 +122,30 @@ class _AvatarUploadState extends State<AvatarUpload> {
                 backgroundColor: Colors.grey[300],
                 radius: 90,
                 child: ClipOval(
-                  child: image != null
-                      ? (image!.path.toString().startsWith("http") ? Image.network(
-                    //to show image, you type like this.
-                    image!.path,
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
-                  ) : Image.file(
-                    //to show image, you type like this.
-                    File(image!.path),
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
-                  ))
-                      : const Icon(
+                  child:
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        (image!.path.toString().startsWith("http") ? Image.network(
+                          //to show image, you type like this.
+                          image!.path,
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width,
+                          height: 300,
+                        ) : Image.file(
+                          //to show image, you type like this.
+                          File(image!.path),
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width,
+                          height: 300,
+                        )),
+                        const Icon(
                           Icons.upload,
-                          color: Colors.black38,
+                          color: Colors.black,
                           size: 40,
-                        ),
+                        )
+                      ],
+                    ),
                 )),
           ),
         ));
