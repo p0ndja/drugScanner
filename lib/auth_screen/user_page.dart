@@ -265,16 +265,34 @@ Widget _logoutButton(BuildContext context) {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xffD70000)),
         onPressed: () async {
+          showDialog(
+              // The user CANNOT close this dialog  by pressing outsite it
+              barrierDismissible: false,
+              context: context,
+              builder: (_) {
+                return Dialog(
+                  // The background color
+                  backgroundColor: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        // The loading indicator
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // Some text
+                        Text('กำลังโหลด...')
+                      ],
+                    ),
+                  ),
+                );
+              });
           await FirebaseAuth.instance.signOut();
-
-          FirebaseAuth.instance.authStateChanges().listen((User? user) {
-            if (user == null) {
-              print('User is currently signed out!');
-            } else {
-              print('User is signed in!');
-            }
-          });
-
+          Navigator.pop(context);
+          globalAuthedUser = null;
           Navigator.pushNamedAndRemoveUntil(
               context, '/login', (route) => false);
         },

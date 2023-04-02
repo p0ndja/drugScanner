@@ -37,6 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       String imgPath = await uploadImg();
       sendPatch({
+        'name': userCredential.user!.displayName.toString(),
         'email': userCredential.user!.email.toString(),
         'img': imgPath,
         'birthdate': _birthdateController.text.trim(),
@@ -120,10 +121,11 @@ class _RegisterPageState extends State<RegisterPage> {
         } else {
           print('User is signed in!');
         }
-        Navigator.pop(context);
-        // Navigate to next screen upon successful registration
-        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       });
+      await assignGlobalAuthedUser();
+      Navigator.pop(context);
+      // Navigate to next screen upon successful registration
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } catch (e) {
       // Handle any errors that occur during registration
       print(e);
