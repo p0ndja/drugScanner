@@ -56,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
         errorMessage = e.code;
       }
       showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
+          // The user CANNOT close this dialog  by pressing outsite it
           barrierDismissible: false,
           context: context,
           builder: (_) {
@@ -80,8 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ],
             );
-          }
-      );
+          });
     } catch (e) {
       print(e);
     }
@@ -90,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void _submitForm() async {
     try {
       showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
+          // The user CANNOT close this dialog  by pressing outsite it
           barrierDismissible: false,
           context: context,
           builder: (_) {
@@ -113,8 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
             );
-          }
-      );
+          });
       await registerUser(_emailController.text, _passwordController.text);
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
@@ -122,10 +120,10 @@ class _RegisterPageState extends State<RegisterPage> {
         } else {
           print('User is signed in!');
         }
+        Navigator.pop(context);
+        // Navigate to next screen upon successful registration
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       });
-      Navigator.pop(context);
-      // Navigate to next screen upon successful registration
-      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } catch (e) {
       // Handle any errors that occur during registration
       print(e);
@@ -133,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pop(context);
       Navigator.of(context).pop();
       showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
+          // The user CANNOT close this dialog  by pressing outsite it
           barrierDismissible: false,
           context: context,
           builder: (_) {
@@ -144,7 +142,8 @@ class _RegisterPageState extends State<RegisterPage> {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    Text("พบข้อผิดพลาดที่ไม่ทราบสาเหตุ โปรดลองใหม่อีกครั้งในภายหลัง"),
+                    Text(
+                        "พบข้อผิดพลาดที่ไม่ทราบสาเหตุ โปรดลองใหม่อีกครั้งในภายหลัง"),
                   ],
                 ),
               ),
@@ -157,8 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ],
             );
-          }
-      );
+          });
     }
   }
 
