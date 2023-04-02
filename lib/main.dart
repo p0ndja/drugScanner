@@ -1,10 +1,13 @@
+import 'package:drug_scanner/elements/User.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:drug_scanner/app_screen/container.dart';
 import 'package:flutter/material.dart';
+import 'app_screen/search_homepage.dart';
 import 'auth_screen/login_page.dart';
 import 'auth_screen/register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +15,14 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  // runApp(
+  //   MultiProvider(
+  //     providers: [
+  //       // ChangeNotifierProvider(create: (_) => ProfileProvider()),
+  //     ],
+  //     child: const MyApp(),
+  //   ),
+  // );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +39,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const MainContainerWidget(),
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegisterPage(),
+          '/homepage': (context) => const HomePage()
         });
   }
 }

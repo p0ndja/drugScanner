@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:drug_scanner/app_screen/container.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart' as http;
 
@@ -6,6 +7,7 @@ import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+import '../app_screen/search_homepage.dart';
 import '../elements/User.dart';
 import '../elements/avatar_upload.dart';
 import 'login_page.dart';
@@ -47,6 +49,7 @@ class _UserPageState extends State<UserPage> {
       User? user = auth.currentUser;
       String idToken = await user!.getIdToken();
       String imgPath = await uploadImg();
+
       sendPatch({
         'email': user.email.toString(),
         'img': imgPath,
@@ -54,7 +57,7 @@ class _UserPageState extends State<UserPage> {
         'birthdate': _birthdateController.text.trim(),
         'weight': _weightController.text.trim()
       }, user.uid);
-
+      // await ProfileProvider().assignGlobalAuthedUser();
       await assignGlobalAuthedUser();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -205,25 +208,6 @@ class _UserPageState extends State<UserPage> {
   }
 }
 
-Widget _avatarUpload(context) {
-  return Container(
-      margin: const EdgeInsets.only(bottom: 20.0),
-      child: GestureDetector(
-        onTap: () {
-          scafMsg(context, 'อัปโหลดรูปภาพ');
-        },
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 1)
-              ]),
-          child: UserCircleAvatar(imageUrl: URLPath),
-        ),
-      ));
-}
-
 Widget _saveButton(BuildContext context, Function() changeInfoUser) {
   return Container(
     margin: const EdgeInsets.only(bottom: 5.0),
@@ -233,7 +217,7 @@ Widget _saveButton(BuildContext context, Function() changeInfoUser) {
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff008080)),
         onPressed: () async {
           showDialog(
-            // The user CANNOT close this dialog  by pressing outsite it
+              // The user CANNOT close this dialog  by pressing outsite it
               barrierDismissible: false,
               context: context,
               builder: (_) {
@@ -256,12 +240,17 @@ Widget _saveButton(BuildContext context, Function() changeInfoUser) {
                     ),
                   ),
                 );
-              }
-          );
+              });
           await changeInfoUser();
           scafMsg(context, 'บันทึกข้อมูล');
           // getUser();
+
           Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => MainContainerWidget()),
+          );
         },
         icon: const Icon(Icons.save_rounded),
         label: const Text('บันทึก')),

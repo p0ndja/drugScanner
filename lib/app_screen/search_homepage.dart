@@ -2,6 +2,7 @@ import 'package:drug_scanner/app_screen/search_result_page.dart';
 import 'package:drug_scanner/auth_screen/user_page.dart';
 import 'package:drug_scanner/elements/Avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../elements/Date.dart';
 import '../elements/User.dart';
@@ -15,7 +16,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // final profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(children: [
@@ -35,7 +44,8 @@ class _HomePageState extends State<HomePage> {
                   Text(globalAuthedUser?.name ?? 'User',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                  Text('${globalAuthedUser?.birthdate != null ? 'อายุ ${ageYear(ageParse(globalAuthedUser?.birthdate ?? "1999-01-01"))} ปี ' : ''}น้ำหนัก ${globalAuthedUser?.weight} กิโลกรัม'),
+                  Text(
+                      '${globalAuthedUser?.birthdate != null ? 'อายุ ${ageYear(ageParse(globalAuthedUser?.birthdate ?? "1999-01-01"))} ปี ' : ''}น้ำหนัก ${globalAuthedUser?.weight} กิโลกรัม'),
                   Container(
                     color: Colors.black12,
                     margin: EdgeInsets.all(10),

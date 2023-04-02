@@ -19,41 +19,41 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _signInWithEmail(String email, String password) async {
     try {
       showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            // The background color
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  // The loading indicator
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // Some text
-                  Text('กำลังโหลด...')
-                ],
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('กำลังโหลด...')
+                  ],
+                ),
               ),
-            ),
-          );
-        }
-      );
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+            );
+          });
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
           print('User is currently signed out!');
         } else {
           print('User is signed in!');
         }
-        Navigator.of(context).pop();
       });
       await assignGlobalAuthedUser();
+      Navigator.of(context).pop();
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } on FirebaseAuthException catch (e) {
       Navigator.of(context).pop();
@@ -66,32 +66,31 @@ class _LoginPageState extends State<LoginPage> {
         errorMessage = 'อีเมลไม่ถูกต้อง';
       }
       showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            // The background color
-            title: const Text('พบข้อผิดพลาด'),
-            backgroundColor: Colors.white,
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(errorMessage),
-                ],
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              // The background color
+              title: const Text('พบข้อผิดพลาด'),
+              backgroundColor: Colors.white,
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(errorMessage),
+                  ],
+                ),
               ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        }
-      );
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
     }
   }
 
