@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'drug_detail.dart';
+
 class DrugDataModel {
   final String? image;
   final String name, usedFor, color, shape;
@@ -18,85 +20,6 @@ class DrugDataModel {
   });
 }
 
-class DrugDetail extends StatelessWidget {
-  const DrugDetail({Key? key, required this.drugDataModel}) : super(key: key);
-  final DrugDataModel drugDataModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            color: Colors.black,
-            iconSize: 35,
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop(context);
-            },
-          ),
-          actions: [
-            IconButton(
-              color: Colors.black,
-              iconSize: 35,
-              icon: const Icon(Icons.bookmark_add),
-              onPressed: () {},
-            ),
-          ],
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
-        extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            LayoutBuilder(builder:
-                (BuildContext context, BoxConstraints viewportConstraints) {
-              return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: viewportConstraints.maxHeight,
-                  ),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          height: 320,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(20),
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            children: [
-                              Text(drugDataModel.name)
-                            ],
-                          )
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }),
-            Column(
-              children: [
-                Container(
-                  height: 320,
-                  alignment: Alignment.center, // This is needed
-                  child: Image.network(
-                    alignment: Alignment.center,
-                    height: double.infinity,
-                    width: double.infinity,
-                    fit: BoxFit.fill,
-                    'https://picsum.photos/250?image=9',
-                  ),
-                ),
-              ],
-            )
-          ],
-        ));
-  }
-}
-
 class SearchPage extends StatefulWidget {
   final String? search;
   const SearchPage({Key? key, required this.search}) : super(key: key);
@@ -105,9 +28,10 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-
 class _SearchPageState extends State<SearchPage> {
   final searchField = TextEditingController();
+  Widget appBarTitle = const Text('กำลังโหลด...');
+  Widget loadingTitle = const CircularProgressIndicator();
   List<DrugDataModel> drugData = [];
 
   @override
@@ -132,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
             pinned: true,
             snap: false,
             centerTitle: true,
-            title: const Text('หน้าค้นหา'),
+            title: appBarTitle,
             actions: [
               IconButton(
                 icon: const Icon(Icons.filter_list),
@@ -168,10 +92,7 @@ class _SearchPageState extends State<SearchPage> {
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Text(
-                    'พบผลการค้นหาทั้งหมด: ${drugData.length} รายการ',
-                    style: const TextStyle(fontSize: 18),
-                  ),
+                  child: loadingTitle,
                 ),
               )),
           SliverList( //เริ่มลิสยา
@@ -180,17 +101,19 @@ class _SearchPageState extends State<SearchPage> {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          DrugDetail(drugDataModel: drugData[index])));
+                      builder: (context) => DrugDetail(drugDataModel: drugData[index])));
                 },
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+                    //scrollDirection: Axis.horizontal,
+
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        BoxOfPill(drugData[index].image, 'ชื่อยา: ${drugData[index].name}', 'ชื่อยา: ${drugData[index].name}')
+                        Center(child: BoxOfPill(image: drugData[index].image, title: drugData[index].name, subtitle: drugData[index].name))
                       ],
                     ),
                   ),
@@ -222,7 +145,7 @@ class _SearchPageState extends State<SearchPage> {
       data.forEach((key, value) {
         drugs.add(DrugDataModel(
             name: value["name"],
-            image: "https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png",
+            image: null,
             type: value["type"],
             color: value["appearance"]["color"],
             shape: value["appearance"]["shape"],
@@ -234,26 +157,29 @@ class _SearchPageState extends State<SearchPage> {
     }
     setState(() {
       drugData = drugs;
+      loadingTitle = const SizedBox(width: 1);
+      appBarTitle = Text('พบผลการค้นหาทั้งหมด ${drugData.length} รายการ', style: const TextStyle(fontSize: 18),);
     });
   }
 }
 
 class BoxOfPill extends StatelessWidget {
-  final image,name1,name2;
-  const BoxOfPill(this.image, this.name1, this.name2);
+  final String title,subtitle;
+  final String? image;
+  const BoxOfPill({super.key, required this.image, required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8), //ระยะกล่อง
+      padding: const EdgeInsetsDirectional.fromSTEB(0,8,0,8), //ระยะกล่อง
       child: Material(
         color: Colors.transparent,
-        elevation: 2, //เงา
+        elevation: 3, //เงา
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8), //ขอบโค้ง
         ),
         child: Container(
-          width: 300,
+          width: MediaQuery.of(context).size.width*0.9,
           height: 125,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -266,7 +192,7 @@ class BoxOfPill extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Image(
-                    image: NetworkImage(image),
+                    image: NetworkImage(image??"https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png"),
                     alignment: Alignment.center,
                     height: double.infinity,
                     width: double.infinity,
@@ -274,13 +200,15 @@ class BoxOfPill extends StatelessWidget {
               ),
               Expanded(
                 flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(name1),
-                    Text(name2)
-                  ],
-                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    ],
+                )),
               )
             ],
           ),
