@@ -242,15 +242,11 @@ Widget _saveButton(BuildContext context, Function() changeInfoUser) {
                 );
               });
           await changeInfoUser();
-          scafMsg(context, 'บันทึกข้อมูล');
+          scafMsg(context, 'บันทึกข้อมูลเรียบร้อยแล้ว');
           // getUser();
 
           Navigator.of(context).popUntil((route) => route.isFirst);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => MainContainerWidget()),
-          );
+          Navigator.of(context).popAndPushNamed("/");
         },
         icon: const Icon(Icons.save_rounded),
         label: const Text('บันทึก')),
