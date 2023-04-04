@@ -32,7 +32,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'Kanit'),
+        theme: ThemeData(
+            fontFamily: 'Inter',
+            fontFamilyFallback: ["Kanit"],
+        ),
         title: _title,
         initialRoute: '/login',
         routes: {
