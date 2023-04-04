@@ -39,41 +39,59 @@ class DrugDetail extends StatelessWidget {
                   constraints: BoxConstraints(
                     minHeight: viewportConstraints.maxHeight,
                   ),
-                  child: IntrinsicHeight(
+                  child: SafeArea(child: IntrinsicHeight(
                     child: Column(
                       children: <Widget>[
-                        Container(
-                          height: 320,
+                        SizedBox(
+                          height: drugDataModel.image != null ? 200 : 0,
                         ),
-                        Container(
+                        Expanded(child: Container(
+                            width: double.infinity,
                             margin: const EdgeInsets.all(20),
-                            alignment: Alignment.centerLeft,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(drugDataModel.name)
+                                Text(drugDataModel.name, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                                Text(drugDataModel.alias.join(", "), style: TextStyle(color: Colors.grey)),
+                                const SizedBox(height: 20),
+                                Text("ประเภทยา", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                Text(drugDataModel.type.join(", ")),
+                                const SizedBox(height: 20),
+                                Text("สรรพคุณ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                Text(drugDataModel.usedFor),
+                                const SizedBox(height: 20),
+                                Text("รูปลักษณ์", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                Text("สี: ${drugDataModel.color == "variant" ? "หลากสี" : drugDataModel.color}\nรูปร่าง: ${drugDataModel.shape == "variant" ? "หลากรูปร่าง" : drugDataModel.shape}"),
+                                const SizedBox(height: 20),
+                                Text("วิธีการใช้ยา", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                Text(drugDataModel.usage.join("\n")),
                               ],
                             )
-                        ),
+                        )),
                       ],
                     ),
-                  ),
+                  )),
                 ),
               );
             }),
-            Column(
-              children: [
-                Container(
-                  height: 320,
-                  alignment: Alignment.center, // This is needed
-                  child: Image.network(
-                    alignment: Alignment.center,
-                    height: double.infinity,
-                    width: double.infinity,
-                    fit: BoxFit.fill,
-                    'https://picsum.photos/250?image=9',
+            Visibility(
+              visible: drugDataModel.image != null,
+              child: Column(
+                children: [
+                  Container(
+                    height: 320,
+                    alignment: Alignment.center, // This is needed
+                    child: Image.network(
+                      drugDataModel.image??"https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png",
+                      alignment: Alignment.center,
+                      height: double.infinity,
+                      width: double.infinity,
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              )
             )
           ],
         ));

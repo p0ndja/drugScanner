@@ -145,7 +145,7 @@ class _SearchPageState extends State<SearchPage> {
       data.forEach((key, value) {
         drugs.add(DrugDataModel(
             name: value["name"],
-            image: null,
+            image: value.containsKey("image") ? value["image"] : null,
             type: value["type"],
             color: value["appearance"]["color"],
             shape: value["appearance"]["shape"],
@@ -165,11 +165,12 @@ class _SearchPageState extends State<SearchPage> {
 
 class BoxOfPill extends StatelessWidget {
   final String title,subtitle;
-  final String? image;
-  const BoxOfPill({super.key, required this.image, required this.title, required this.subtitle});
+  late String? image;
+  BoxOfPill({super.key, required this.image, required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
+    image = image??"https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png";
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0,8,0,8), //ระยะกล่อง
       child: Material(
@@ -191,22 +192,28 @@ class BoxOfPill extends StatelessWidget {
             children: [
               Expanded(
                 flex: 2,
-                child: Image(
-                    image: NetworkImage(image??"https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png"),
-                    alignment: Alignment.center,
-                    height: double.infinity,
-                    width: double.infinity,
-                    fit: BoxFit.fill),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                  ),
+                  child: Image(
+                  image: NetworkImage(image!),
+                  alignment: Alignment.center,
+                  height: double.infinity,
+                  width: double.infinity,
+                  fit: BoxFit.fill),
+                )
               ),
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(right: 10, left: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     ],
                 )),
               )
