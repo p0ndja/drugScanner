@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           print('User is signed in!');
         }
       });
-      await assignGlobalAuthedUser();
+      await CurUser().assignUser();
       Navigator.of(context).pop();
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } on FirebaseAuthException catch (e) {
@@ -107,7 +107,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [

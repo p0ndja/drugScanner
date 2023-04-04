@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
       //     });
       // Navigator.pop(context);
       print('User account created successfully: ${userCredential.user!.uid}');
-      await assignGlobalAuthedUser();
+      await CurrentAuthUser().assign();
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } on FirebaseAuthException catch (e) {
       // Navigator.pop(context);

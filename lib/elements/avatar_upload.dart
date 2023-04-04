@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'Avatar.dart';
 
-XFile? image = XFile(globalAuthedUser?.image ?? URLPath);
+XFile? image = XFile(CurrentAuthUser().get()?.image ?? URLPath);
 
 Future uploadImg() async {
   if (image == null) {

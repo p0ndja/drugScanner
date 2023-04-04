@@ -2,9 +2,74 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 // import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 
 Profile? globalAuthedUser;
+
+class CurrentAuthUser extends ChangeNotifier {
+  Future<Profile?> assign() async {
+    globalAuthedUser = await CurUser().assignUser();
+    notifyListeners();
+  }
+
+  Profile? get() {
+    return globalAuthedUser;
+  }
+
+  void clear() {
+    globalAuthedUser = null;
+    notifyListeners();
+  }
+}
+
+class CurUser {
+  Future<Profile?> assignUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String idToken = await user!.getIdToken();
+
+    // print(idToken);
+    // print(user.uid);
+    Uri url = Uri.parse(
+        'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user
+            .uid}.json');
+
+    http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // print(response.statusCode);
+      Map<String, dynamic> data = jsonDecode(response.body);
+      // print(data);
+      if (data.isNotEmpty) {
+        globalAuthedUser = Profile(
+          image: data["img"],
+          name: data["name"],
+          email: data["email"],
+          weight: data["weight"],
+          birthdate: data["birthdate"],
+        );
+        return globalAuthedUser;
+      } else {
+        return null;
+      }
+      // Extract the profile data from the response
+      // ...
+    } else {
+      return null;
+      // Handle errors
+      // ...
+    }
+  }
+
+  Profile? get() {
+    return globalAuthedUser;
+  }
+
+  void reset() {
+    globalAuthedUser = null;
+  }
+}
 
 class Profile {
   final String image, name, email, weight, birthdate;
@@ -58,39 +123,3 @@ class Profile {
 //   }
 // }
 
-Future<Profile?> assignGlobalAuthedUser() async {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  User? user = auth.currentUser;
-  String idToken = await user!.getIdToken();
-
-  // print(idToken);
-  // print(user.uid);
-  Uri url = Uri.parse(
-      'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user.uid}.json');
-
-  http.Response response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    // print(response.statusCode);
-    Map<String, dynamic> data = jsonDecode(response.body);
-    // print(data);
-    if (data.isNotEmpty) {
-      globalAuthedUser = Profile(
-        image: data["img"],
-        name: data["name"],
-        email: data["email"],
-        weight: data["weight"],
-        birthdate: data["birthdate"],
-      );
-      return globalAuthedUser;
-    } else {
-      return null;
-    }
-    // Extract the profile data from the response
-    // ...
-  } else {
-    return null;
-    // Handle errors
-    // ...
-  }
-}

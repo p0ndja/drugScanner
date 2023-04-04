@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _searchField = TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -26,133 +27,142 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     // final profileProvider = Provider.of<ProfileProvider>(context);
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(children: [
-          FractionallySizedBox(
-            widthFactor: 1, // between 0 and 1
-            heightFactor: 0.3,
-            child: Container(
-              color: const Color(0xff008080),
-            ),
-          ),
-          Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _avatarUpload(context),
-                  Text(globalAuthedUser?.name ?? 'User',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                  Text(
-                      '${globalAuthedUser?.birthdate != null ? 'อายุ ${ageYear(ageParse(globalAuthedUser?.birthdate ?? "1999-01-01"))} ปี ' : ''}น้ำหนัก ${globalAuthedUser?.weight} กิโลกรัม'),
-                  Container(
-                    color: Colors.black12,
-                    margin: EdgeInsets.all(10),
-                    child: Center(
-                      child: TextField(
-                        controller: _searchField,
-                        decoration: InputDecoration(
-                            prefix: const Padding(
-                                padding: EdgeInsets.only(left: 15)),
-                            hintText: 'ค้นหาด้วยชื่อยา...',
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.search),
-                              color: const Color(0xff008080),
-                              iconSize: 30,
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (builder) => SearchPage(search: _searchField.text)));
-                              },
-                            ),
-                            border: InputBorder.none),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'สีของเม็ดยา',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          BoxChoiceColorPill(Colors.red),
-                          BoxChoiceColorPill(Colors.blue),
-                          BoxChoiceColorPill(Colors.white),
-                          BoxChoiceColorPill(Colors.yellow),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'ลักษณะของเม็ดยา',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          BoxChoiceShapePill('วงกลม', Icons.circle),
-                          BoxChoiceShapePill('วงรี', Icons.egg_rounded),
-                          BoxChoiceShapePill('แคปซูล', Icons.toggle_off),
-                          BoxChoiceShapePill('สามเหลียม', Icons.play_arrow),
-                          BoxChoiceShapePill('สี่เหลียม', Icons.square),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+    return Consumer<CurrentAuthUser>(builder: (context, user, child) {
+      return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Stack(children: [
+            FractionallySizedBox(
+              widthFactor: 1, // between 0 and 1
+              heightFactor: 0.3,
+              child: Container(
+                color: const Color(0xff008080),
               ),
             ),
-          ),
-        ]));
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _avatarUpload(context),
+                    Text(user.get()?.name ?? 'User',
+                        style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                    Text(
+                        '${user.get()?.birthdate != null
+                            ? 'อายุ ${ageYear(ageParse(
+                            user.get()?.birthdate ?? "1999-01-01"))} ปี '
+                            : ''}น้ำหนัก ${user.get()?.weight} กิโลกรัม'),
+                    Container(
+                      color: Colors.black12,
+                      margin: EdgeInsets.all(10),
+                      child: Center(
+                        child: TextField(
+                          controller: _searchField,
+                          decoration: InputDecoration(
+                              prefix: const Padding(
+                                  padding: EdgeInsets.only(left: 15)),
+                              hintText: 'ค้นหาด้วยชื่อยา...',
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.search),
+                                color: const Color(0xff008080),
+                                iconSize: 30,
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                              SearchPage(
+                                                  search: _searchField.text)));
+                                },
+                              ),
+                              border: InputBorder.none),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: const [
+                          Text(
+                            'สีของเม็ดยา',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: const [
+                            BoxChoiceColorPill(Colors.red),
+                            BoxChoiceColorPill(Colors.blue),
+                            BoxChoiceColorPill(Colors.white),
+                            BoxChoiceColorPill(Colors.yellow),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: const [
+                          Text(
+                            'ลักษณะของเม็ดยา',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: const [
+                            BoxChoiceShapePill('วงกลม', Icons.circle),
+                            BoxChoiceShapePill('วงรี', Icons.egg_rounded),
+                            BoxChoiceShapePill('แคปซูล', Icons.toggle_off),
+                            BoxChoiceShapePill('สามเหลียม', Icons.play_arrow),
+                            BoxChoiceShapePill('สี่เหลียม', Icons.square),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ]));
+    });
   }
 }
 
 Widget _avatarUpload(BuildContext context) {
-  return Container(
-      margin: const EdgeInsets.only(bottom: 20.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const UserPage()));
-        },
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 1)
-              ]),
-          child: UserCircleAvatar(imageUrl: globalAuthedUser?.image ?? ""),
-        ),
-      ));
+  return Consumer<CurrentAuthUser>(builder: (context, user, child) {
+    return Container(
+        margin: const EdgeInsets.only(bottom: 20.0),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const UserPage()));
+          },
+          child: Container(
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 1)
+                ]),
+            child: UserCircleAvatar(imageUrl: user.get()?.image ?? ""),
+          ),
+        ));
+  });
 }
 
 class BoxChoiceColorPill extends StatelessWidget {

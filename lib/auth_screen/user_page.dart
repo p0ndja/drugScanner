@@ -58,7 +58,7 @@ class _UserPageState extends State<UserPage> {
         'weight': _weightController.text.trim()
       }, user.uid);
       // await ProfileProvider().assignGlobalAuthedUser();
-      await assignGlobalAuthedUser();
+      await CurrentAuthUser().assign();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -292,7 +292,7 @@ Widget _logoutButton(BuildContext context) {
               });
           await FirebaseAuth.instance.signOut();
           Navigator.pop(context);
-          globalAuthedUser = null;
+          CurUser().reset();
           Navigator.pushNamedAndRemoveUntil(
               context, '/login', (route) => false);
         },
