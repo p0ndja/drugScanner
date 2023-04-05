@@ -4,22 +4,6 @@ import 'dart:convert';
 
 import 'drug_detail.dart';
 
-class DrugDataModel {
-  final String? image;
-  final String name, usedFor, color, shape;
-  final List alias, type, usage;
-  DrugDataModel({
-    required this.image,
-    required this.name,
-    required this.usedFor,
-    required this.color,
-    required this.shape,
-    required this.alias,
-    required this.type,
-    required this.usage,
-  });
-}
-
 class SearchPage extends StatefulWidget {
   final String? search;
   const SearchPage({Key? key, required this.search}) : super(key: key);
@@ -130,7 +114,8 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Future<void> getDrugData(String? search, String? type, String? color, String? shape) async {
+  Future<void> getDrugData(
+      String? search, String? type, String? color, String? shape) async {
     List<DrugDataModel> drugs = [];
     String baseURL = 'https://sv1.p0nd.dev/drugScanner/?';
     if (search != null) {
@@ -149,6 +134,7 @@ class _SearchPageState extends State<SearchPage> {
       Map<String, dynamic> data = jsonDecode(response.body);
       data.forEach((key, value) {
         drugs.add(DrugDataModel(
+            id: key,
             name: value["name"],
             image: value.containsKey("image") ? value["image"] : null,
             type: value["type"],
