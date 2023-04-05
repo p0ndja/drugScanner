@@ -31,7 +31,6 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final searchField = TextEditingController();
   Widget appBarTitle = const Text('กำลังโหลด...');
-  Widget loadingTitle = const CircularProgressIndicator();
   List<DrugDataModel> drugData = [];
 
   @override
@@ -57,13 +56,17 @@ class _SearchPageState extends State<SearchPage> {
             pinned: true,
             snap: false,
             centerTitle: true,
-            title: appBarTitle,
+            title: Text(
+                "ผลการค้นหา${widget.search!.isNotEmpty ? ' \"${widget.search}\"' : ''}"),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.filter_list),
-                onPressed: () {},
-              ),
+              Visibility(
+                  visible: false,
+                  child: IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    onPressed: () {},
+                  )),
             ],
+            /*
             bottom: AppBar(
               automaticallyImplyLeading: false,
               backgroundColor: const Color(0xff008080),
@@ -88,14 +91,8 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
+            */
           ),
-          SliverToBoxAdapter(
-              child: Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: loadingTitle,
-            ),
-          )),
           SliverList(
             //เริ่มลิสยา
             delegate:
@@ -133,8 +130,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Future<void> getDrugData(
-      String? search, String? type, String? color, String? shape) async {
+  Future<void> getDrugData(String? search, String? type, String? color, String? shape) async {
     List<DrugDataModel> drugs = [];
     String baseURL = 'https://sv1.p0nd.dev/drugScanner/?';
     if (search != null) {
@@ -165,7 +161,6 @@ class _SearchPageState extends State<SearchPage> {
     }
     setState(() {
       drugData = drugs;
-      loadingTitle = const SizedBox(width: 1);
       appBarTitle = Text(
         'พบผลการค้นหาทั้งหมด ${drugData.length} รายการ',
         style: const TextStyle(fontSize: 18),
@@ -210,7 +205,7 @@ class BoxOfPill extends StatelessWidget {
               Expanded(
                   flex: 2,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(8),
                       bottomLeft: Radius.circular(8),
                     ),
