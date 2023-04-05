@@ -21,7 +21,9 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
         // appBar: AppBar(
         //   title: const Text('DrugScanner'),
         //   automaticallyImplyLeading: false,
@@ -30,6 +32,7 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
           child: _widgetOptions.elementAt(selectedIndex),
         ),
         bottomNavigationBar: bottomNavigator()
+      )
     );
   }
 
