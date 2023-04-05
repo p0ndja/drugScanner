@@ -1,10 +1,16 @@
-import 'package:drug_scanner/app_screen/search_result_page.dart';
 import 'package:flutter/material.dart';
 
-class DrugDetail extends StatelessWidget {
+import 'search_result_page.dart';
+
+class DrugDetail extends StatefulWidget {
   const DrugDetail({Key? key, required this.drugDataModel}) : super(key: key);
   final DrugDataModel drugDataModel;
 
+  @override
+  _DrugDetailState createState() => _DrugDetailState();
+}
+
+class _DrugDetailState extends State<DrugDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,36 +45,54 @@ class DrugDetail extends StatelessWidget {
                   constraints: BoxConstraints(
                     minHeight: viewportConstraints.maxHeight,
                   ),
-                  child: SafeArea(child: IntrinsicHeight(
+                  child: SafeArea(
+                      child: IntrinsicHeight(
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          height: drugDataModel.image != null ? 200 : 0,
+                          height: widget.drugDataModel.image != null ? 200 : 0,
                         ),
-                        Expanded(child: Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.all(20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(drugDataModel.name, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                                Text(drugDataModel.alias.join(", "), style: TextStyle(color: Colors.grey)),
-                                const SizedBox(height: 20),
-                                Text("ประเภทยา", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                Text(drugDataModel.type.join(", ")),
-                                const SizedBox(height: 20),
-                                Text("สรรพคุณ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                Text(drugDataModel.usedFor),
-                                const SizedBox(height: 20),
-                                Text("รูปลักษณ์", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                Text("สี: ${drugDataModel.color == "variant" ? "หลากสี" : drugDataModel.color}\nรูปร่าง: ${drugDataModel.shape == "variant" ? "หลากรูปร่าง" : drugDataModel.shape}"),
-                                const SizedBox(height: 20),
-                                Text("วิธีการใช้ยา", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                Text(drugDataModel.usage.join("\n")),
-                              ],
-                            )
-                        )),
+                        Expanded(
+                            child: Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(widget.drugDataModel.name,
+                                        style: TextStyle(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(widget.drugDataModel.alias.join(", "),
+                                        style: TextStyle(color: Colors.grey)),
+                                    const SizedBox(height: 20),
+                                    Text("ประเภทยา",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(widget.drugDataModel.type.join(", ")),
+                                    const SizedBox(height: 20),
+                                    Text("สรรพคุณ",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(widget.drugDataModel.usedFor),
+                                    const SizedBox(height: 20),
+                                    Text("รูปลักษณ์",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(
+                                        "สี: ${widget.drugDataModel.color == "variant" ? "หลากสี" : widget.drugDataModel.color}\nรูปร่าง: ${widget.drugDataModel.shape == "variant" ? "หลากรูปร่าง" : widget.drugDataModel.shape}"),
+                                    const SizedBox(height: 20),
+                                    Text("วิธีการใช้ยา",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(widget.drugDataModel.usage.join("\n")),
+                                  ],
+                                ))),
                       ],
                     ),
                   )),
@@ -76,23 +100,23 @@ class DrugDetail extends StatelessWidget {
               );
             }),
             Visibility(
-              visible: drugDataModel.image != null,
-              child: Column(
-                children: [
-                  Container(
-                    height: 320,
-                    alignment: Alignment.center, // This is needed
-                    child: Image.network(
-                      drugDataModel.image??"https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png",
-                      alignment: Alignment.center,
-                      height: double.infinity,
-                      width: double.infinity,
-                      fit: BoxFit.fill,
+                visible: widget.drugDataModel.image != null,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 320,
+                      alignment: Alignment.center, // This is needed
+                      child: Image.network(
+                        widget.drugDataModel.image ??
+                            "https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png",
+                        alignment: Alignment.center,
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            )
+                  ],
+                ))
           ],
         ));
   }

@@ -38,19 +38,20 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     getDrugData(widget.search, null, null, null);
-    searchField.text = widget.search??'';
+    searchField.text = widget.search ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
+    return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () { Navigator.pop(context); }
-            ),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
             backgroundColor: const Color(0xff008080),
             floating: true,
             pinned: true,
@@ -74,15 +75,15 @@ class _SearchPageState extends State<SearchPage> {
                   child: TextField(
                     controller: searchField,
                     decoration: InputDecoration(
-                        prefix: const Padding(padding: EdgeInsets.only(left: 15)),
+                        prefix:
+                            const Padding(padding: EdgeInsets.only(left: 15)),
                         hintText: 'ค้นหาด้วยชื่อยา...',
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
                           color: const Color(0xff008080),
                           onPressed: () {},
                         ),
-                        border: InputBorder.none
-                    ),
+                        border: InputBorder.none),
                   ),
                 ),
               ),
@@ -90,18 +91,20 @@ class _SearchPageState extends State<SearchPage> {
           ),
           SliverToBoxAdapter(
               child: Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: loadingTitle,
-                ),
-              )),
-          SliverList( //เริ่มลิสยา
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: loadingTitle,
+            ),
+          )),
+          SliverList(
+            //เริ่มลิสยา
             delegate:
-            SliverChildBuilderDelegate((BuildContext context, int index) {
+                SliverChildBuilderDelegate((BuildContext context, int index) {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => DrugDetail(drugDataModel: drugData[index])));
+                      builder: (context) =>
+                          DrugDetail(drugDataModel: drugData[index])));
                 },
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
@@ -113,7 +116,11 @@ class _SearchPageState extends State<SearchPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Center(child: BoxOfPill(image: drugData[index].image, title: drugData[index].name, subtitle: drugData[index].name))
+                        Center(
+                            child: BoxOfPill(
+                                image: drugData[index].image,
+                                title: drugData[index].name,
+                                subtitle: drugData[index].name))
                       ],
                     ),
                   ),
@@ -125,7 +132,9 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-  Future<void> getDrugData(String? search, String? type, String? color, String? shape) async {
+
+  Future<void> getDrugData(
+      String? search, String? type, String? color, String? shape) async {
     List<DrugDataModel> drugs = [];
     String baseURL = 'https://sv1.p0nd.dev/drugScanner/?';
     if (search != null) {
@@ -151,28 +160,35 @@ class _SearchPageState extends State<SearchPage> {
             shape: value["appearance"]["shape"],
             alias: value["alias"],
             usedFor: value["for"],
-            usage: value["usage"]
-        ));
+            usage: value["usage"]));
       });
     }
     setState(() {
       drugData = drugs;
       loadingTitle = const SizedBox(width: 1);
-      appBarTitle = Text('พบผลการค้นหาทั้งหมด ${drugData.length} รายการ', style: const TextStyle(fontSize: 18),);
+      appBarTitle = Text(
+        'พบผลการค้นหาทั้งหมด ${drugData.length} รายการ',
+        style: const TextStyle(fontSize: 18),
+      );
     });
   }
 }
 
 class BoxOfPill extends StatelessWidget {
-  final String title,subtitle;
+  final String title, subtitle;
   late String? image;
-  BoxOfPill({super.key, required this.image, required this.title, required this.subtitle});
+  BoxOfPill(
+      {super.key,
+      required this.image,
+      required this.title,
+      required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
-    image = image??"https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png";
+    image = image ??
+        "https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png";
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(0,8,0,8), //ระยะกล่อง
+      padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8), //ระยะกล่อง
       child: Material(
         color: Colors.transparent,
         elevation: 3, //เงา
@@ -180,42 +196,44 @@ class BoxOfPill extends StatelessWidget {
           borderRadius: BorderRadius.circular(8), //ขอบโค้ง
         ),
         child: Container(
-          width: MediaQuery.of(context).size.width*0.9,
+          width: MediaQuery.of(context).size.width * 0.9,
           height: 125,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Row( // ของในกล่อง
+          child: Row(
+            // ของในกล่อง
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                flex: 2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
-                  child: Image(
-                  image: NetworkImage(image!),
-                  alignment: Alignment.center,
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.fill),
-                )
-              ),
+                  flex: 2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                    child: Image(
+                        image: NetworkImage(image!),
+                        alignment: Alignment.center,
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.fill),
+                  )),
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 10, left: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    ],
-                )),
+                    padding: const EdgeInsets.only(right: 10, left: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(title,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                      ],
+                    )),
               )
             ],
           ),
