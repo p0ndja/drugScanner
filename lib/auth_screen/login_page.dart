@@ -160,7 +160,7 @@ Widget iconApp = Container(
     child: SizedBox.fromSize(
       size: const Size.fromRadius(105), // Image radius
       child: Image.asset(
-        'images/iconApp.png',
+        'images/logo.png',
         fit: BoxFit.cover,
       ),
     ),
