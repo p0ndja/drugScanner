@@ -1,3 +1,4 @@
+import 'package:drug_scanner/app_screen/bookmark_page.dart';
 import 'package:drug_scanner/elements/User.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:drug_scanner/app_screen/container.dart';
@@ -39,8 +40,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            fontFamily: 'Inter',
-            fontFamilyFallback: ["Kanit"],
+          fontFamily: 'Inter',
+          fontFamilyFallback: ["Kanit"],
         ),
         title: _title,
         initialRoute: '/login',
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const MainContainerWidget(),
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegisterPage(),
+          '/bookmark': (context) => const BookmarkPage(),
         });
   }
 }

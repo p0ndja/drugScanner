@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:drug_scanner/app_screen/search_result_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +16,7 @@ class BookmarkPage extends StatefulWidget {
 class _BookmarkPageState extends State<BookmarkPage> {
   final searchField = TextEditingController();
   Widget appBarTitle = const Text('กำลังโหลด...');
-  Widget loadingTitle = const CircularProgressIndicator();
+
   List<DrugDataModel> drugData = [];
 
   @override
@@ -83,8 +82,11 @@ class _BookmarkPageState extends State<BookmarkPage> {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          DrugDetail(drugDataModel: drugData[index])));
+                      builder: (context) => DrugDetail(
+                            drugDataModel: drugData[index],
+                            isBookmarked: true,
+                            isFromBookmarkPage: true,
+                          )));
                 },
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
@@ -117,12 +119,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
       String? search, String? type, String? color, String? shape) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    // String idToken = await user!.getIdToken();
 
     List<DrugDataModel> drugs = [];
 
     String baseURL =
         'https://drugscanner-ae525-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user!.uid}.json';
+    String baseURL2 = 'https://sv1.p0nd.dev/drugScanner/?';
     // if (search != null) {
     //   baseURL += '&search=$search';
     // } else if (type != null) {
@@ -132,27 +134,43 @@ class _BookmarkPageState extends State<BookmarkPage> {
     // } else if (shape != null) {
     //   baseURL += '&shape=$shape';
     // }
+
     Uri url = Uri.parse(baseURL);
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       // print(response.statusCode);
       Map<String, dynamic> data = jsonDecode(response.body);
-      data.forEach((key, value) {
-        drugs.add(value['bookmark']);
-        // drugs.add(DrugDataModel(
-        //     name: value["name"],
-        //     image: value.containsKey("image") ? value["image"] : null,
-        //     type: value["type"],
-        //     color: value["appearance"]["color"],
-        //     shape: value["appearance"]["shape"],
-        //     alias: value["alias"],
-        //     usedFor: value["for"],
-        //     usage: value["usage"]));
-      });
-      print(drugs);
+      List<dynamic> dataBookmark =
+          data["bookmark"] ?? []; // Get the List<dynamic> from the map
+      List<String> drugsBookmark =
+          dataBookmark.map((item) => item.toString()).toList();
+      Uri url2 = Uri.parse(baseURL2);
+      http.Response response2 = await http.get(url2);
+      if (response2.statusCode == 200) {
+        // print(response.statusCode);
+        Map<String, dynamic> data = jsonDecode(response2.body);
+        data.forEach((key, value) {
+          // print(key);
+          if (drugsBookmark.contains(key)) {
+            drugs.add(DrugDataModel(
+                id: key,
+                name: value["name"],
+                image: value.containsKey("image") ? value["image"] : null,
+                type: value["type"],
+                color: value["appearance"]["color"],
+                shape: value["appearance"]["shape"],
+                alias: value["alias"],
+                usedFor: value["for"],
+                usage: value["usage"]));
+          }
+        });
+      }
+      // print(drugsBookmark);
     }
+
     setState(() {
-      // drugData = drugs;
+      drugData = drugs;
+
       // loadingTitle = const SizedBox(width: 1);
       // appBarTitle = Text(
       //   'พบผลการค้นหาทั้งหมด ${drugData.length} รายการ',
