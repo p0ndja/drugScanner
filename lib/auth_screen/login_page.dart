@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       await assignGlobalAuthedUser();
       Navigator.of(context).pop();
-      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+      Navigator.of(context).pushReplacementNamed("/");
     } on FirebaseAuthException catch (e) {
       Navigator.of(context).pop();
       String errorMessage = e.code;

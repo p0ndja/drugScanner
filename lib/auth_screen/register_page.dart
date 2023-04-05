@@ -30,6 +30,31 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> registerUser(String email, String password) async {
     try {
+      showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            // The background color
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  // The loading indicator
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Some text
+                  Text('กำลังโหลด...')
+                ],
+              ),
+            ),
+          );
+        });
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -43,38 +68,15 @@ class _RegisterPageState extends State<RegisterPage> {
         'birthdate': _birthdateController.text.trim(),
         'weight': _weightController.text.trim()
       }, userCredential.user!.uid);
-      // showDialog(
-      //     // The user CANNOT close this dialog  by pressing outsite it
-      //     barrierDismissible: false,
-      //     context: context,
-      //     builder: (_) {
-      //       return Dialog(
-      //         // The background color
-      //         backgroundColor: Colors.white,
-      //         child: Padding(
-      //           padding: const EdgeInsets.symmetric(vertical: 20),
-      //           child: Column(
-      //             mainAxisSize: MainAxisSize.min,
-      //             children: const [
-      //               // The loading indicator
-      //               CircularProgressIndicator(),
-      //               SizedBox(
-      //                 height: 15,
-      //               ),
-      //               // Some text
-      //               Text('กำลังโหลด...')
-      //             ],
-      //           ),
-      //         ),
-      //       );
-      //     });
+
       // Navigator.pop(context);
       print('User account created successfully: ${userCredential.user!.uid}');
       await assignGlobalAuthedUser();
-      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed("/");
     } on FirebaseAuthException catch (e) {
       // Navigator.pop(context);
-      // Navigator.of(context).pop();
+      Navigator.of(context).pop();
       String errorMessage = e.code;
       if (e.code == 'weak-password') {
         errorMessage = 'รหัสผ่านของคุณอ่อนแอเกินไป';
