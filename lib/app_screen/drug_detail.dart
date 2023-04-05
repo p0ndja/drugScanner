@@ -13,27 +13,24 @@ class DrugDetail extends StatefulWidget {
 class _DrugDetailState extends State<DrugDetail> {
   @override
   Widget build(BuildContext context) {
+    bool isBookmarked = false;
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
-            color: Colors.black,
-            iconSize: 35,
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               Navigator.of(context).pop(context);
             },
           ),
           actions: [
             IconButton(
-              color: Colors.black,
-              iconSize: 35,
-              icon: const Icon(Icons.bookmark_add),
+              color: Colors.white,
+              icon: isBookmarked ? const Icon(Icons.bookmark_add, color: Colors.black) : const Icon(Icons.bookmark_add, color: Colors.black),
               onPressed: () {},
             ),
           ],
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          backgroundColor: widget.drugDataModel.image != null ? Colors.transparent : const Color(0xff008080),
         ),
         extendBodyBehindAppBar: true,
         body: Stack(
