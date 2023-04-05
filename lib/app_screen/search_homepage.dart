@@ -7,6 +7,68 @@ import 'package:provider/provider.dart';
 import '../elements/Date.dart';
 import '../elements/User.dart';
 
+List<ToggleButtonHelper> colorBtn = [
+  ToggleButtonHelper(text: "All", color: Colors.black, icon: null, isSelected: true),
+  ToggleButtonHelper(text: "White", color: Colors.black54, icon: null, isSelected: false),
+  ToggleButtonHelper(text: "Red", color: Colors.red, icon: null, isSelected: false),
+  ToggleButtonHelper(text: "Green", color: Colors.green, icon: null, isSelected: false),
+  ToggleButtonHelper(text: "Blue", color: Colors.blue, icon: null, isSelected: false),
+  ToggleButtonHelper(text: "Pink", color: Colors.pinkAccent, icon: null, isSelected: false),
+  ToggleButtonHelper(text: "Yellow", color: Colors.orange, icon: null, isSelected: false),
+  ToggleButtonHelper(text: "Orange", color: Colors.deepOrange, icon: null, isSelected: false),
+  ToggleButtonHelper(text: "Black", color: Colors.black, icon: null, isSelected: false),
+];
+List<ToggleButtonHelper> shapeBtn = [
+  ToggleButtonHelper(text: "All", color: Colors.black54, icon: Icons.interests, isSelected: true),
+  ToggleButtonHelper(text: "Circle", color: Colors.black54, icon: Icons.circle, isSelected: false),
+  ToggleButtonHelper(text: "Oval", color: Colors.black54, icon: Icons.egg_rounded, isSelected: false),
+  ToggleButtonHelper(text: "Capsule", color: Colors.black54, icon: Icons.toggle_off, isSelected: false),
+  ToggleButtonHelper(text: "Triangle", color: Colors.black54, icon: Icons.play_arrow, isSelected: false),
+  ToggleButtonHelper(text: "Square", color: Colors.black54, icon: Icons.square, isSelected: false),
+];
+
+class ToggleButtonHelper {
+  final String text;
+  final Color color;
+  final IconData? icon;
+  late bool isSelected;
+
+  ToggleButtonHelper({required this.text, required this.color, this.icon, required this.isSelected});
+
+  Widget widget() {
+    return Container(
+        color: !isSelected ? Colors.white : color, width: 100, height: double.infinity,
+        child: icon != null ?
+          Center(child: Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Column(children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.black : Color(0xFFF1F4F8), //สีวงกลม
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon!,
+                color: isSelected ? Colors.white : color,
+                size: 32,
+              ),
+            ),
+            Text(text, style: TextStyle(color: isSelected ? Colors.white : color, fontWeight: FontWeight.bold, fontSize: 16))
+          ],)))
+            :
+          Center(child: Text(text, style: TextStyle(color: isSelected ? Colors.white : color, fontWeight: FontWeight.bold, fontSize: 16)))
+    );
+  }
+
+  bool setToggle(bool sts) {
+    isSelected = sts;
+    return isSelected;
+  }
+
+  String txt() {
+    return text;
+  }
+}
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -25,7 +87,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(children: [
@@ -38,6 +99,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Center(
             child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -62,10 +124,7 @@ class _HomePageState extends State<HomePage> {
                               color: const Color(0xff008080),
                               iconSize: 30,
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (builder) => SearchPage(search: _searchField.text)));
+                                Navigator.push(context, MaterialPageRoute(builder: (builder) => SearchPage(search: _searchField.text, color: colorBtn[colorBtn.indexWhere((element) => element.isSelected)].text, shape: shapeBtn[shapeBtn.indexWhere((element) => element.isSelected)].text)));
                               },
                             ),
                             border: InputBorder.none),
@@ -88,14 +147,24 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          BoxChoiceColorPill(Colors.red),
-                          BoxChoiceColorPill(Colors.blue),
-                          BoxChoiceColorPill(Colors.white),
-                          BoxChoiceColorPill(Colors.yellow),
-                        ],
+                      child: ToggleButtons(
+                        onPressed: (int index) {
+                          setState(() {
+                            // The button that is tapped is set to true, and the others to false.
+                            for (int i = 0; i < colorBtn.length; i++) {
+                              colorBtn[i].setToggle(i == index);
+                            }
+                          });
+                        },
+                        selectedBorderColor: Colors.black12,
+                        selectedColor: Colors.black38,
+                        fillColor:  Colors.black38,
+                        constraints: const BoxConstraints(
+                          minHeight: 40.0,
+                          minWidth: 80.0,
+                        ),
+                        isSelected: colorBtn.map((e) => e.isSelected).toList(),
+                        children: colorBtn.map((e) => e.widget()).toList(),
                       ),
                     ),
                   ),
@@ -115,15 +184,24 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsetsDirectional.fromSTEB(0, 4, 1, 0),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          BoxChoiceShapePill('วงกลม', Icons.circle),
-                          BoxChoiceShapePill('วงรี', Icons.egg_rounded),
-                          BoxChoiceShapePill('แคปซูล', Icons.toggle_off),
-                          BoxChoiceShapePill('สามเหลียม', Icons.play_arrow),
-                          BoxChoiceShapePill('สี่เหลียม', Icons.square),
-                        ],
+                      child: ToggleButtons(
+                        onPressed: (int index) {
+                          setState(() {
+                            // The button that is tapped is set to true, and the others to false.
+                            for (int i = 0; i < shapeBtn.length; i++) {
+                              shapeBtn[i].setToggle(i == index);
+                            }
+                          });
+                        },
+                        selectedBorderColor: Colors.black12,
+                        selectedColor: Colors.black38,
+                        fillColor:  Colors.black38,
+                        constraints: const BoxConstraints(
+                          minHeight: 40.0,
+                          minWidth: 80.0,
+                        ),
+                        isSelected: shapeBtn.map((e) => e.isSelected).toList(),
+                        children: shapeBtn.map((e) => e.widget()).toList(),
                       ),
                     ),
                   ),
@@ -163,12 +241,13 @@ class BoxChoiceColorPill extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(16, 8, 0, 8),
-      child: Material(
+      child: MaterialButton(
         color: Color(0xffeeeeee), //สีกล่อง
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
+        onPressed: () {  },
         child: Container(
           //กรอบ
           width: 100,
@@ -205,7 +284,7 @@ class BoxChoiceColorPill extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      )
     );
   }
 }

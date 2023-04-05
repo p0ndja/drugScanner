@@ -21,8 +21,8 @@ class DrugDataModel {
 }
 
 class SearchPage extends StatefulWidget {
-  final String? search;
-  const SearchPage({Key? key, required this.search}) : super(key: key);
+  final String? search,type,color,shape;
+  const SearchPage({Key? key, required this.search, this.type, this.color, this.shape}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -36,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    getDrugData(widget.search, null, null, null);
+    getDrugData(widget.search, widget.type, widget.color, widget.shape);
     searchField.text = widget.search ?? '';
   }
 
@@ -56,8 +56,10 @@ class _SearchPageState extends State<SearchPage> {
             pinned: true,
             snap: false,
             centerTitle: true,
-            title: Text(
-                "ผลการค้นหา${widget.search!.isNotEmpty ? ' \"${widget.search}\"' : ''}"),
+            title: Column(children: [
+            Text("ผลการค้นหา${widget.search!.isNotEmpty ? ' \"${widget.search}\"' : ''}"),
+            Text("สี: ${(widget.color??"ทั้งหมด") == "All"? "ทั้งหมด": widget.color}, รูปร่าง: ${(widget.shape??"ทั้งหมด") == "All"? "ทั้งหมด": widget.shape}, ประเภท: ${(widget.shape??"ทั้งหมด") == "All"? "ทั้งหมด": widget.shape}", style: TextStyle(fontSize: 12))
+            ]),
             actions: [
               Visibility(
                   visible: false,
@@ -66,32 +68,28 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {},
                   )),
             ],
-            /*
-            bottom: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: const Color(0xff008080),
-              title: Container(
-                width: double.infinity,
-                height: 40,
-                color: Colors.white,
-                child: Center(
-                  child: TextField(
-                    controller: searchField,
-                    decoration: InputDecoration(
-                        prefix:
-                            const Padding(padding: EdgeInsets.only(left: 15)),
-                        hintText: 'ค้นหาด้วยชื่อยา...',
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          color: const Color(0xff008080),
-                          onPressed: () {},
-                        ),
-                        border: InputBorder.none),
-                  ),
-                ),
-              ),
-            ),
-            */
+            // bottom: AppBar(
+            //   automaticallyImplyLeading: false,
+            //   backgroundColor: const Color(0xff008080),
+            //   title: Container(
+            //     child: Center(
+            //       child:
+            //       // child: TextField(
+            //       //   controller: searchField,
+            //       //   decoration: InputDecoration(
+            //       //       prefix:
+            //       //           const Padding(padding: EdgeInsets.only(left: 15)),
+            //       //       hintText: 'ค้นหาด้วยชื่อยา...',
+            //       //       suffixIcon: IconButton(
+            //       //         icon: const Icon(Icons.search),
+            //       //         color: const Color(0xff008080),
+            //       //         onPressed: () {},
+            //       //       ),
+            //       //       border: InputBorder.none),
+            //       // ),
+            //     ),
+            //   ),
+            // ),
           ),
           SliverList(
             //เริ่มลิสยา
@@ -135,13 +133,17 @@ class _SearchPageState extends State<SearchPage> {
     String baseURL = 'https://sv1.p0nd.dev/drugScanner/?';
     if (search != null) {
       baseURL += '&search=$search';
-    } else if (type != null) {
+    }
+    if (type != null && type != "All") {
       baseURL += '&type=$type';
-    } else if (color != null) {
+    }
+    if (color != null && color != "All") {
       baseURL += '&color=$color';
-    } else if (shape != null) {
+    }
+    if (shape != null && shape != "All") {
       baseURL += '&shape=$shape';
     }
+    print(baseURL);
     Uri url = Uri.parse(baseURL);
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
@@ -152,7 +154,7 @@ class _SearchPageState extends State<SearchPage> {
             name: value["name"],
             image: value.containsKey("image") ? value["image"] : null,
             type: value["type"],
-            color: value["appearance"]["color"],
+            color: value["appearance"]["color"].toString().replaceAll("[", "").replaceAll("]", ""),
             shape: value["appearance"]["shape"],
             alias: value["alias"],
             usedFor: value["for"],
