@@ -39,9 +39,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
             snap: false,
             centerTitle: true,
             title: const Text('รายการบันทึก'),
+            automaticallyImplyLeading: false,
             bottom: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: const Color(0xffFFC30F),
               title: Container(
+                padding: EdgeInsets.only(left: 10),
                 width: double.infinity,
                 height: 40,
                 color: Colors.white,
@@ -50,12 +53,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
                     controller: searchField,
                     decoration: InputDecoration(
                         hintText: 'ค้นหาด้วยชื่อยา...',
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Color(0xffFFC30F),
-                        ),
                         suffixIcon: IconButton(
-                          icon: const Icon(Icons.camera_alt),
+                          icon: const Icon(Icons.search),
                           color: const Color(0xffFFC30F),
                           onPressed: () {},
                         ),
